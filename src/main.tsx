@@ -21,7 +21,14 @@ function App(){
  const [query,setQuery]=useState(''),[changing,setChanging]=useState(false),[hours,setHours]=useState(false),[selected,setSelected]=useState<Facility|null>(null),[notice,setNotice]=useState('');
  const [visibleCount,setVisibleCount]=useState(30),[savedOnly,setSavedOnly]=useState(false),[listOpen,setListOpen]=useState(false),[detailTab,setDetailTab]=useState<'info'|'community'>('info'),[extraSearch,setExtraSearch]=useState(false);
  const [filtersOpen,setFiltersOpen]=useState(false),[mapOnly,setMapOnly]=useState(false),[detailExpanded,setDetailExpanded]=useState(false);
+ const workspaceRef=useRef<HTMLElement>(null),searchRef=useRef<HTMLElement>(null);
  const detailRef=useRef<HTMLElement>(null),accountDialog=useRef<HTMLDialogElement>(null),infoDialog=useRef<HTMLDialogElement>(null);
+ useEffect(()=>{
+  const search=searchRef.current,workspace=workspaceRef.current;if(!search||!workspace)return;
+  const measure=()=>workspace.style.setProperty('--search-bottom',`${Math.ceil(search.getBoundingClientRect().height)+22}px`);
+  const observer=new ResizeObserver(measure);observer.observe(search);measure();return()=>observer.disconnect();
+ },[]);
+ useEffect(()=>{if(listOpen)setFiltersOpen(false);},[listOpen]);
  const bookmarks=useBookmarks();
  const sheet=useSheetDrag(listOpen,setListOpen);
  const refresh=useCallback(()=>{api<Facility[]>('/facilities').then(f=>{if(!Array.isArray(f)||f.some(x=>typeof x.id!=='string'||typeof x.name!=='string'))throw new Error('잘못된 시설 응답');setFacilities(f);setDataNotice('');setSelected(s=>s?.provider==='kakao'?s:s?f.find(x=>x.id===s.id)??null:null);}).catch(()=>setDataNotice('서버에 연결하지 못해 공개 원본을 표시합니다. 승인된 수정 정보는 불러오지 못했습니다.'));},[]);
@@ -53,11 +60,11 @@ function App(){
    <div className="header-caption"><span className="live-dot"/>우리 곁의 작은 쉼표</div>
    <nav className="header-actions" aria-label="서비스 메뉴"><button className={`nav-button ${savedOnly?'active':''}`} aria-pressed={savedOnly} onClick={()=>{setMapOnly(false);setSavedOnly(s=>!s);setSelected(null);setListOpen(true);}}><Icon name="heart"/><span>저장한 장소</span><span className="count-badge">{bookmarks.ids.length}</span></button><button className="icon-button" aria-label="이용 안내" onClick={()=>infoDialog.current?.showModal()}><Icon name="info"/></button><button className="profile-button" aria-label="내 계정 열기" onClick={()=>accountDialog.current?.showModal()}><Icon name="user"/><span>{user?user.handle:'로그인'}</span></button></nav>
   </header>
-  <main style={sheet.height===null?undefined:{'--list-height':`${sheet.height}px`} as CSSProperties} className={`workspace ${selected?'has-selection':''} ${listOpen?'list-open':'list-closed'} ${filtersOpen?'filters-open':''} ${mapOnly?'map-only':''} ${detailExpanded?'detail-expanded':''} ${sheet.height!==null?'sheet-dragging':''}`}>
+  <main ref={workspaceRef} style={sheet.height===null?undefined:{'--list-height':`${sheet.height}px`} as CSSProperties} className={`workspace ${selected?'has-selection':''} ${listOpen?'list-open':'list-closed'} ${filtersOpen?'filters-open':''} ${mapOnly?'map-only':''} ${detailExpanded?'detail-expanded':''} ${sheet.height!==null?'sheet-dragging':''}`}>
    <aside className="explorer" aria-label="수유실 탐색">
-    <section className="search-zone" aria-label="수유실 검색">
+    <section ref={searchRef} className="search-zone" aria-label="수유실 검색">
      <div className="section-eyebrow">A LITTLE REST, A LITTLE LOVE</div><h1>{savedOnly?'다시 찾고 싶은 곳':'어디에서 찾으세요?'}</h1><p className="search-description">{savedOnly?'이 기기에 저장한 수유실을 모았어요.':'아기와 나를 위한 작은 쉼표를 찾아요.'}</p>
-     <div className="search-toolbar"><div className="search-field"><Icon name="search"/><label className="sr-only" htmlFor="query">지역·시설명</label><input id="query" value={query} onChange={e=>region(e.target.value)} placeholder="지역이나 시설 이름으로 검색" autoComplete="off"/>{query&&<button className="icon-button" aria-label="검색어 지우기" onClick={()=>region('')}><Icon name="close" size={16}/></button>}</div><button className={`filter-toggle ${changing||hours?'active':''}`} aria-label="지역·필터 설정" aria-expanded={filtersOpen} aria-controls="search-options" onClick={()=>setFiltersOpen(v=>!v)}><Icon name="filter" size={19}/><span>필터{changing||hours?` · ${Number(changing)+Number(hours)}`:''}</span></button></div>
+     <div className="search-toolbar"><div className="search-field"><Icon name="search"/><label className="sr-only" htmlFor="query">지역·시설명</label><input id="query" value={query} onChange={e=>region(e.target.value)} placeholder="지역이나 시설 이름으로 검색" autoComplete="off"/>{query&&<button className="icon-button" aria-label="검색어 지우기" onClick={()=>region('')}><Icon name="close" size={16}/></button>}</div><button className={`filter-toggle ${changing||hours?'active':''}`} aria-label="지역·필터 설정" aria-expanded={filtersOpen} aria-controls="search-options" onClick={()=>{if(!filtersOpen)setListOpen(false);setFiltersOpen(v=>!v);}}><Icon name="filter" size={19}/><span>필터{changing||hours?` · ${Number(changing)+Number(hours)}`:''}</span></button></div>
      <div id="search-options" className="search-options"><div className="region-chips" aria-label="제공 지역">{['전체','세종','부산','성남','제주','인천','대구'].map(r=><button key={r} className={!bounds&&query===(r==='전체'?'':r)?'region-chip active':'region-chip'} onClick={()=>region(r==='전체'?'':r)} aria-pressed={!bounds&&query===(r==='전체'?'':r)}>{r}</button>)}</div>
      <div className="filter-row"><label className={`filter-chip ${changing?'checked':''}`}><input type="checkbox" checked={changing} onChange={e=>{setChanging(e.target.checked);setSelected(null);}}/><Icon name="baby" size={16}/><span>기저귀 교환대 있음</span></label><label className={`filter-chip ${hours?'checked':''}`}><input type="checkbox" checked={hours} onChange={e=>{setHours(e.target.checked);setSelected(null);}}/><Icon name="clock" size={16}/><span>운영시간 정보 있음</span></label></div>
      {(query||changing||hours||bounds||position)&&<button className="reset-button" onClick={reset}>필터 초기화</button>}

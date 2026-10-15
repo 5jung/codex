@@ -31,3 +31,10 @@
 }
 
 .install-card{display:grid;grid-template-columns:52px 1fr;align-items:center;gap:12px;padding:16px;border:1px solid #ecd5bd;border-radius:22px;background:#fff5e5;margin:20px 0}.install-card>img{border-radius:16px}.install-card h3{font-size:14px;margin:0}.install-card p{font-size:12px;margin:4px 0;color:#7b6251}.install-instructions{grid-column:1/-1;border-top:1px solid #eddcc7;padding-top:10px}.install-instructions p{margin:10px 0}.install-instructions .primary-button{width:100%;border:0}.install-instructions .install-note{font-size:11px;color:#7c6a5b}.install-message{grid-column:1/-1}
+
+@media(max-width:760px){
+ /* Follow the real search-panel height, including notices, filters and wrapped text. */
+ .workspace:not(.has-selection):not(.map-only) .map-search-button{top:var(--search-bottom,76px);visibility:visible}
+ .workspace:not(.has-selection):not(.map-only) .map-zoom{top:calc(var(--search-bottom,76px) + 54px);visibility:visible}
+ .workspace:not(.has-selection):not(.map-only) .map-error:not(.map-loading){top:calc(var(--search-bottom,76px) + 52px)}
+}

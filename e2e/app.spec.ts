@@ -187,3 +187,21 @@ test('홈 화면 아이콘 설정과 기기별 설치 안내·설치 요청',asy
  await guide.getByRole('button',{name:'홈 화면에 설치'}).click();await expect(guide.getByRole('status')).toContainText('추가 요청을 보냈어요');
  await page.evaluate(()=>window.dispatchEvent(new Event('appinstalled')));await expect(guide).toContainText('지금 앱 화면으로 이용하고 있어요.');await expect(guide.getByRole('button',{name:'홈 화면에 설치'})).toHaveCount(0);
 });
+
+test('모바일 위치 안내와 검색어·필터가 있어도 지도 영역 검색을 누를 수 있다',async({page,context})=>{
+ test.skip(!process.env.VITE_KAKAO_MAP_KEY,'지도 키가 없는 환경');
+ await page.setViewportSize({width:390,height:844});await context.grantPermissions(['geolocation']);await context.setGeolocation({latitude:36.48,longitude:127.26});
+ await page.goto('/',{waitUntil:'domcontentloaded'});await page.getByRole('button',{name:'내 위치 확인'}).click();await expect(page.getByText(/내 주변 10km의 자료/)).toBeVisible();
+ await page.getByLabel('지역·시설명').fill('Ak');
+ const button=page.getByRole('button',{name:'이 지도 영역에서 찾기'});await expect(button).toBeVisible({timeout:25000});
+ async function unobstructed(){
+  await expect.poll(async()=>{const search=(await page.locator('.search-zone').boundingBox())!,target=(await button.boundingBox())!;return target.y-(search.y+search.height);}).toBeGreaterThanOrEqual(8);
+  expect(await button.evaluate(el=>{const r=el.getBoundingClientRect();return el.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2));})).toBe(true);
+  await button.click({trial:true});
+ }
+ await unobstructed();await button.click();await expect(page.getByText('현재 지도 영역의 좌표 확인 시설만 표시합니다.',{exact:false})).toBeVisible();await expect(page.getByLabel('지역·시설명')).toHaveValue('Ak');
+ await page.getByRole('button',{name:'지역·필터 설정'}).click();await expect(page.getByLabel('기저귀 교환대 있음')).toBeVisible();await unobstructed();
+ await page.setViewportSize({width:360,height:640});await unobstructed();
+ await page.getByRole('button',{name:'지역·필터 설정'}).click();await unobstructed();
+ await page.screenshot({path:'/workspace/artifacts/nursing-map-search-visible.png'});
+});
