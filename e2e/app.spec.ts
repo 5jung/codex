@@ -224,3 +224,13 @@ test('세종 보완 시설은 검색·실내 위치·근거 수준을 구분해 
  const detail=page.getByRole('region',{name:'시설 상세'}),official=detail.getByRole('region',{name:'시설 안내 근거'});await expect(official).toContainText('시설 공식 안내');await expect(official).toContainText('안내 확인일 2026-10-15');await expect(detail.getByRole('link',{name:'044-251-0001'})).toHaveAttribute('href','tel:044-251-0001');await expect(detail.getByText(/방문자센터 1층·단풍정원/)).toBeVisible();
  await page.getByRole('button',{name:'상세 닫기'}).click();await page.getByLabel('지역·시설명').fill('홈플러스 세종점 수유실');await page.locator('.card').filter({has:page.getByRole('heading',{name:'홈플러스 세종점 수유실',exact:true})}).click();await expect(detail.getByText('문화센터 안 · 후기의 층 표기가 1층/B1층으로 서로 다름',{exact:true})).toBeVisible();await expect(detail.getByText('세종특별자치시 절재로 154',{exact:true})).toBeVisible();
 });
+
+test('대전·청주 보완 시설은 지역별로 검색되고 공식 위치·입장 제약을 제공한다',async({page})=>{
+ await page.goto('/');await page.getByRole('button',{name:'대전',exact:true}).click();
+ for(const name of ['국립중앙과학관 수유실','한밭수목원 열대식물원 수유실','대전신세계 Art&Science 수유실','한밭도서관 수유실'])await expect(page.locator('.card').getByRole('heading',{name,exact:true})).toBeVisible();
+ await page.locator('.card').filter({has:page.getByRole('heading',{name:'대전신세계 Art&Science 수유실',exact:true})}).click();const detail=page.getByRole('region',{name:'시설 상세'});await expect(detail.getByText(/방문 후기에는 신세계포인트 회원 확인/)).toBeVisible();await page.getByRole('button',{name:'상세 닫기'}).click();
+ await page.getByRole('button',{name:'청주',exact:true}).click();
+ for(const name of ['국립청주박물관 수유실','현대백화점 충청점 유아휴게실','동부창고 카페C 수유실'])await expect(page.locator('.card').getByRole('heading',{name,exact:true})).toBeVisible();
+ await page.locator('.card').filter({has:page.getByRole('heading',{name:'현대백화점 충청점 유아휴게실',exact:true})}).click();await expect(detail.getByText('3층 유아휴게실 (시설 공식 안내)',{exact:true})).toBeVisible();await expect(detail.getByRole('link',{name:'043-909-2670'})).toHaveAttribute('href','tel:043-909-2670');await expect(detail.getByRole('region',{name:'시설 안내 근거'})).toBeVisible();
+ await page.getByRole('button',{name:'상세 닫기'}).click();await page.getByRole('button',{name:'이용 안내',exact:true}).click();await expect(page.getByRole('dialog',{name:'서비스 이용 안내'})).toContainText('세종 10곳 · 대전 4곳 · 청주 3곳');
+});

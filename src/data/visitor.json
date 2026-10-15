@@ -32,7 +32,8 @@
           "label": "AK& 세종 수유실 위치 방문 후기",
           "summary": "AK&의 2층 H&M 인근 수유실과 기저귀 교환대·전자레인지 등을 소개합니다."
         }
-      ]
+      ],
+      "region": "세종"
     },
     {
       "id": "visitor-sejong-national-library",
@@ -65,7 +66,8 @@
           "label": "국립세종도서관 수유실 방문 후기",
           "summary": "수유 공간과 기저귀 교환대·전자레인지 등의 이용 경험을 소개합니다."
         }
-      ]
+      ],
+      "region": "세종"
     },
     {
       "id": "visitor-sejong-city-library",
@@ -91,7 +93,8 @@
           "label": "세종시립도서관 수유실 직접 이용 후기",
           "summary": "1층 입구 화장실 옆 수유실을 이용한 경험과 도서관 주소를 안내합니다."
         }
-      ]
+      ],
+      "region": "세종"
     },
     {
       "id": "visitor-sejong-arboretum",
@@ -120,7 +123,8 @@
           "dateKind": "checked"
         }
       ],
-      "phone": "044-251-0001"
+      "phone": "044-251-0001",
+      "region": "세종"
     },
     {
       "id": "visitor-sejong-childrens-museum",
@@ -155,7 +159,8 @@
           "summary": "1층 수유실을 안내하며 기저귀 교환은 화장실을 이용했다고 설명합니다."
         }
       ],
-      "phone": "044-251-3000"
+      "phone": "044-251-3000",
+      "region": "세종"
     },
     {
       "id": "visitor-emart-sejong",
@@ -182,7 +187,8 @@
           "label": "이마트 세종점 수유실 이용 후기",
           "summary": "2층 엘리베이터 근처 수유실의 위치와 이용 경험을 설명합니다."
         }
-      ]
+      ],
+      "region": "세종"
     },
     {
       "id": "visitor-homeplus-sejong",
@@ -215,7 +221,8 @@
           "label": "세종 수유실 이용 장소 모음 후기",
           "summary": "문화센터 안 수유실을 안내하지만 B1층으로 표기해 층수 대조가 필요합니다."
         }
-      ]
+      ],
+      "region": "세종"
     },
     {
       "id": "visitor-costco-sejong",
@@ -248,7 +255,8 @@
           "label": "코스트코 세종점 수유실 동선 후기",
           "summary": "푸드코트 구역의 위치와 편의시설을 설명하며 수유 공간의 개방성을 언급합니다."
         }
-      ]
+      ],
+      "region": "세종"
     },
     {
       "id": "visitor-starbucks-sejong-art",
@@ -281,7 +289,8 @@
           "label": "세종예술의전당점 가족휴게실 이용 후기",
           "summary": "입구 왼편 가족휴게실의 수유 공간과 기저귀 교환대를 소개합니다."
         }
-      ]
+      ],
+      "region": "세종"
     },
     {
       "id": "visitor-presidential-archives",
@@ -315,7 +324,228 @@
           "summary": "수유실이 전시관 1층 구름다리 건너 사무동 구역에 있다고 안내합니다."
         }
       ],
-      "phone": "044-211-2000"
+      "phone": "044-211-2000",
+      "region": "세종"
+    },
+    {
+      "id": "visitor-daejeon-national-science",
+      "region": "대전",
+      "name": "국립중앙과학관 수유실",
+      "address": "대전광역시 유성구 대덕대로 481",
+      "aliases": [
+        "대전 과학관",
+        "대전 국립중앙과학관"
+      ],
+      "sourceKind": "visitor",
+      "evidenceLevel": "facility-guide",
+      "location": "과학기술관 1층·지하층, 자연사관 등 여러 전시관 (공식 안내)",
+      "hours": null,
+      "changingTable": null,
+      "sourceName": "시설 공식 안내",
+      "sourceUrl": "https://www.science.go.kr/mps/cntnts/1023/moveCntnts.do",
+      "sourceUpdatedAt": null,
+      "access": "전시관별 관람·예약·유료 체험관 접근 조건과 휴관일을 확인해주세요.",
+      "notes": "여러 전시관을 한 시설로 묶었으며 지도 점은 건물 주소 기준입니다. 후기에서 1층과 지하층 공간 크기 차이를 언급하므로 유모차 동선을 현장에서 확인해주세요.",
+      "evidence": [
+        {
+          "url": "https://www.science.go.kr/mps/cntnts/1023/moveCntnts.do",
+          "date": "2026-10-15",
+          "label": "국립중앙과학관 공식 편의시설 안내",
+          "summary": "과학기술관·자연사관·창의나래관·미래기술관·어린이과학관 등의 수유실 위치를 안내합니다.",
+          "dateKind": "checked"
+        },
+        {
+          "url": "https://blog.naver.com/qhfka3465/224290090234",
+          "date": "2026-05-19",
+          "label": "과학기술관 수유실 방문 후기",
+          "summary": "과학기술관 1층 화학 코너 인근과 지하층 수유 공간을 이용한 경험을 설명합니다."
+        }
+      ],
+      "phone": "042-601-7979"
+    },
+    {
+      "id": "visitor-daejeon-hanbat-arboretum",
+      "region": "대전",
+      "name": "한밭수목원 열대식물원 수유실",
+      "address": "대전광역시 서구 둔산대로 169",
+      "aliases": [
+        "대전 한밭수목원",
+        "한밭 수목원"
+      ],
+      "sourceKind": "visitor",
+      "evidenceLevel": "visitor",
+      "location": "열대식물원 입구 안쪽 왼편 (방문 후기 기준)",
+      "hours": null,
+      "changingTable": null,
+      "sourceName": "공개 방문 후기 검토",
+      "sourceUrl": "https://blog.naver.com/zezalog/224282811065",
+      "sourceUpdatedAt": "2026-05-12",
+      "access": "후기에 24개월 이하 이용 조건이 언급됩니다. 현재 연령·운영시간·열대식물원 휴관일을 확인해주세요.",
+      "notes": "후기에는 분리된 모유수유 공간과 문 잠금이 없었다고 설명합니다. 현재 프라이버시 조건을 확인해주세요. 수목원 야외 개방시간을 수유실 운영시간으로 간주하지 않습니다.",
+      "evidence": [
+        {
+          "url": "https://blog.naver.com/zezalog/224282811065",
+          "date": "2026-05-12",
+          "label": "한밭수목원 수유실 위치 방문 후기",
+          "summary": "열대식물원 입구 왼편 수유실과 당시 이용 조건을 안내합니다."
+        }
+      ]
+    },
+    {
+      "id": "visitor-daejeon-shinsegae",
+      "region": "대전",
+      "name": "대전신세계 Art&Science 수유실",
+      "address": "대전광역시 유성구 엑스포로 1",
+      "aliases": [
+        "대전 신세계",
+        "대전신세계백화점",
+        "대전 신세계 리틀라운지"
+      ],
+      "sourceKind": "visitor",
+      "evidenceLevel": "visitor",
+      "location": "4층 아동복 매장 쪽 리틀라운지 (방문 후기 기준)",
+      "hours": null,
+      "changingTable": null,
+      "sourceName": "공개 방문 후기 검토",
+      "sourceUrl": "https://blog.naver.com/lapin22/224434000554",
+      "sourceUpdatedAt": "2026-10-07",
+      "access": "방문 후기에는 신세계포인트 회원 확인 후 입장했다고 적혀 있습니다. 현재 회원·동반 보호자 조건을 확인해주세요.",
+      "notes": "백화점 안 다른 휴게시설·식품관과 구분해주세요. VIP 예약룸과 일반 유아휴게실의 이용 조건은 다를 수 있습니다.",
+      "evidence": [
+        {
+          "url": "https://blog.naver.com/lapin22/224434000554",
+          "date": "2026-10-07",
+          "label": "대전신세계 리틀라운지 방문 후기",
+          "summary": "엑스포로 1의 4층 리틀라운지 위치와 방문 당시 입장 절차를 설명합니다."
+        }
+      ]
+    },
+    {
+      "id": "visitor-daejeon-hanbat-library",
+      "region": "대전",
+      "name": "한밭도서관 수유실",
+      "address": "대전광역시 중구 서문로 10",
+      "aliases": [
+        "대전 한밭도서관"
+      ],
+      "sourceKind": "visitor",
+      "evidenceLevel": "visitor",
+      "location": "어린이자료실 안내에서 수유실 언급 · 정확한 층·실번호 미확인",
+      "hours": null,
+      "changingTable": null,
+      "sourceName": "공개 방문 후기 검토",
+      "sourceUrl": "https://blog.naver.com/yunseo3150/224425048653",
+      "sourceUpdatedAt": "2026-09-28",
+      "access": "자료실별 개방시간과 휴관일이 다릅니다. 안내데스크에서 수유실 접근 경로를 확인해주세요.",
+      "notes": "한밭도서관 주변 공동육아나눔터와 같은 시설로 합치지 않았습니다. 후기만으로 수유실의 정확한 층·실번호를 확정하지 않습니다.",
+      "evidence": [
+        {
+          "url": "https://blog.naver.com/yunseo3150/224425048653",
+          "date": "2026-09-28",
+          "label": "한밭도서관 가족 동반 이용 후기",
+          "summary": "서문로 10 도서관의 어린이자료실 소개에서 수유실이 마련되어 있다고 설명합니다."
+        }
+      ]
+    },
+    {
+      "id": "visitor-cheongju-national-museum",
+      "region": "청주",
+      "name": "국립청주박물관 수유실",
+      "address": "충청북도 청주시 상당구 명암로 143",
+      "aliases": [
+        "청주 국립박물관",
+        "청주 어린이박물관"
+      ],
+      "sourceKind": "visitor",
+      "evidenceLevel": "visitor",
+      "location": "어린이박물관 방문 후기에서 수유실 언급 · 층·실번호 미확인",
+      "hours": null,
+      "changingTable": null,
+      "sourceName": "공개 방문 후기 검토",
+      "sourceUrl": "https://blog.naver.com/myei250/224364198733",
+      "sourceUpdatedAt": "2026-07-31",
+      "access": "어린이박물관 관람 예약·회차와 휴관일을 확인하고 수유실의 현재 출입 동선을 안내받아 주세요.",
+      "notes": "국립청주박물관과 별도의 충북 해양과학관을 혼동하지 않습니다. 정확한 수유실 층·실번호는 확인되지 않아 방문 전 문의가 필요합니다.",
+      "evidence": [
+        {
+          "url": "https://blog.naver.com/myei250/224364198733",
+          "date": "2026-07-31",
+          "label": "국립청주박물관 어린이박물관 방문 후기",
+          "summary": "명암로 143 국립청주박물관 방문에서 수유실과 유모차 이용 편의를 언급합니다."
+        }
+      ]
+    },
+    {
+      "id": "visitor-cheongju-hyundai",
+      "region": "청주",
+      "name": "현대백화점 충청점 유아휴게실",
+      "address": "충청북도 청주시 흥덕구 직지대로 308",
+      "aliases": [
+        "청주 현대백화점",
+        "현대 충청점",
+        "청주 현백"
+      ],
+      "sourceKind": "visitor",
+      "evidenceLevel": "facility-guide",
+      "location": "3층 유아휴게실 (시설 공식 안내)",
+      "hours": null,
+      "changingTable": true,
+      "sourceName": "시설 공식 안내",
+      "sourceUrl": "https://www.ehyundai.com/newPortal/uplex/IF/IF000002_V.do?branchCd=B00147000",
+      "sourceUpdatedAt": null,
+      "access": "연령·동반 보호자 조건과 모유수유 공간의 출입 구분을 현장 안내에 따라 확인해주세요.",
+      "notes": "공식 안내의 유아휴게실 연락처입니다. 백화점 전체 영업시간과 공간별 이용시간이 같다고 가정하지 않습니다.",
+      "evidence": [
+        {
+          "url": "https://www.ehyundai.com/newPortal/uplex/IF/IF000002_V.do?branchCd=B00147000",
+          "date": "2026-10-15",
+          "label": "현대백화점 충청점 공식 서비스시설 안내",
+          "summary": "3층 유아휴게실의 수유 공간·기저귀 교환대와 연락처를 안내합니다.",
+          "dateKind": "checked"
+        },
+        {
+          "url": "https://blog.naver.com/ha2mong/224402747957",
+          "date": "2026-09-09",
+          "label": "충청점 유아휴게실 방문 후기",
+          "summary": "3층 유아복 매장 구역의 유아휴게실 위치와 당시 이용 경험을 설명합니다."
+        }
+      ],
+      "phone": "043-909-2670"
+    },
+    {
+      "id": "visitor-cheongju-dongbu-cafe",
+      "region": "청주",
+      "name": "동부창고 카페C 수유실",
+      "address": "충청북도 청주시 청원구 덕벌로 30",
+      "aliases": [
+        "청주 동부창고",
+        "동부창고 카페씨",
+        "청주 카페C"
+      ],
+      "sourceKind": "visitor",
+      "evidenceLevel": "visitor",
+      "location": "동부창고 8동 카페C 내부 · 카운터 옆 안쪽 (방문 후기 기준)",
+      "hours": null,
+      "changingTable": null,
+      "sourceName": "공개 방문 후기 검토",
+      "sourceUrl": "https://blog.naver.com/herb_lozenge/224428567074",
+      "sourceUpdatedAt": "2026-10-03",
+      "access": "카페 영업일·휴무일과 주문/이용 조건을 확인해주세요.",
+      "notes": "동부창고 전체와 카페C가 있는 8동을 구분해주세요. 편백놀이·공용휴게 공간의 이용 조건을 수유실 출입 조건과 동일하게 보지 않습니다.",
+      "evidence": [
+        {
+          "url": "https://blog.naver.com/herb_lozenge/224428567074",
+          "date": "2026-10-03",
+          "label": "동부창고 카페C 수유실 방문 후기",
+          "summary": "덕벌로 30의 동부창고 8동 카페 내부 수유실과 접근 동선을 설명합니다."
+        },
+        {
+          "url": "https://blog.naver.com/hot_hosang/223573022969",
+          "date": "2024-09-05",
+          "label": "동부창고 카페C 아기 동반 방문 후기",
+          "summary": "동부창고 8동 카페 내부 수유 공간과 편의시설을 소개합니다."
+        }
+      ]
     }
   ]
 }

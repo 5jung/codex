@@ -9,10 +9,10 @@ test('AK 명칭 변형을 찾고 방문 후기와 공식 확인을 구분한다'
 });
 
 test('보완 카탈로그는 중복 없는 주소·근거·확인 수준을 유지하고 지도 좌표를 저장하지 않는다',()=>{
- assert.equal(items.length,10);assert.equal(new Set(items.map(f=>f.id)).size,items.length);
- assert.equal(items.filter(f=>f.evidenceLevel==='facility-guide').length,3);
+ assert.equal(items.filter(f=>f.region==='세종').length,10);assert.equal(items.filter(f=>f.region==='대전').length,4);assert.equal(items.filter(f=>f.region==='청주').length,3);assert.equal(new Set(items.map(f=>f.id)).size,items.length);
+ assert.equal(items.filter(f=>f.evidenceLevel==='facility-guide').length,5);
  for(const f of items){
-  assert.equal(f.sourceKind,'visitor');assert.ok(f.address.startsWith('세종특별자치시 '));assert.ok(f.location);assert.ok(f.evidence?.length);assert.equal(f.latitude,undefined);assert.equal(f.longitude,undefined);
+  assert.equal(f.sourceKind,'visitor');assert.match(f.address,/^(세종특별자치시|대전광역시|충청북도 청주시) /);assert.ok(f.region);assert.ok(f.location);assert.ok(f.evidence?.length);assert.equal(f.latitude,undefined);assert.equal(f.longitude,undefined);
   for(const e of f.evidence!){assert.ok(e.url.startsWith('https://'));assert.match(e.date,/^\d{4}-\d{2}-\d{2}$/);assert.ok(e.date<='2026-10-15');if(e.dateKind==='checked')assert.ok(!e.url.includes('blog.naver.com'));}
  }
  const homeplus=items.find(f=>f.id==='visitor-homeplus-sejong')!;assert.equal(homeplus.address,'세종특별자치시 절재로 154');assert.ok(homeplus.location?.includes('서로 다름'));
