@@ -107,7 +107,7 @@ test('저장한 장소는 새로고침 후 유지되고 저장 취소 가능',as
  await page.getByRole('button',{name:'강서구청 저장 취소',exact:true}).click();await expect(page.getByRole('heading',{name:'아직 저장한 장소가 없어요'})).toBeVisible();
 });
 test('모바일 탐색·상세·닫기·안내 접근성',async({page})=>{
- await page.setViewportSize({width:360,height:800});await page.goto('/',{waitUntil:'domcontentloaded'});await page.getByLabel('지역·시설명').fill('강서구청');await page.locator('.card').filter({has:page.getByRole('heading',{name:'강서구청',exact:true})}).click();
+ await page.setViewportSize({width:360,height:800});await page.goto('/',{waitUntil:'domcontentloaded'});await page.getByLabel('지역·시설명').fill('강서구청');await page.getByRole('button',{name:'시설 목록 펼치기'}).click();await page.locator('.card').filter({has:page.getByRole('heading',{name:'강서구청',exact:true})}).click();
  await expect(page.getByRole('region',{name:'시설 상세'})).toBeVisible();await page.getByRole('button',{name:'상세 닫기'}).click();await expect(page.getByRole('region',{name:'시설 상세'})).toHaveCount(0);
  await page.getByRole('button',{name:'이용 안내',exact:true}).click();await expect(page.getByRole('dialog',{name:'서비스 이용 안내'})).toBeVisible();await page.keyboard.press('Escape');await expect(page.getByRole('dialog',{name:'서비스 이용 안내'})).not.toBeVisible();
  const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth);expect(overflow).toBe(false);
@@ -128,4 +128,24 @@ test('세종은 카카오 장소검색 후보를 지도와 목록에 표시',asy
 test('세종 현재 위치에서도 주변 검색 후보를 제공',async({page,context})=>{
  test.skip(!process.env.VITE_KAKAO_MAP_KEY,'지도 키가 없는 환경');await context.grantPermissions(['geolocation']);await context.setGeolocation({latitude:36.48,longitude:127.26});await page.goto('/',{waitUntil:'domcontentloaded'});await page.getByRole('button',{name:'내 위치 확인'}).click();
  await expect(page.locator('.card').first()).toContainText('수유실 검색 후보',{timeout:30000});await expect(page.locator('.card').first()).toContainText('세종');await expect(page.locator('.card').first()).toContainText('km');await expect(page.getByText(/내 주변 10km의 자료/)).toBeVisible();
+});
+
+
+test('모바일에서 넓은 지도·필터·목록·상세 펼치기 전환',async({page})=>{
+ await page.setViewportSize({width:390,height:844});await page.goto('/',{waitUntil:'domcontentloaded'});
+ await expect(page.getByRole('button',{name:'시설 목록 펼치기'})).toHaveAttribute('aria-expanded','false');
+ const search=await page.locator('.search-zone').boundingBox(),sheet=await page.locator('.results-panel').boundingBox();
+ expect(search).not.toBeNull();expect(sheet).not.toBeNull();expect(sheet!.y-(search!.y+search!.height)).toBeGreaterThan(844*.65);
+ await expect(page.getByLabel('기저귀 교환대 있음')).not.toBeVisible();await page.getByRole('button',{name:'지역·필터 설정'}).click();await expect(page.getByLabel('기저귀 교환대 있음')).toBeVisible();
+ await page.getByLabel('기저귀 교환대 있음').check();await page.getByRole('button',{name:'지역·필터 설정'}).click();await expect(page.getByRole('button',{name:'지역·필터 설정'})).toContainText('1');
+ await page.getByRole('button',{name:'지도 크게 보기'}).click();await expect(page.getByRole('textbox',{name:'지역·시설명'})).not.toBeVisible();await expect(page.locator('.results-panel')).not.toBeVisible();
+ await page.screenshot({path:'/workspace/artifacts/nursing-map-focus.png'});
+ await page.getByRole('button',{name:'검색·목록 보기'}).click();await expect(page.getByRole('textbox',{name:'지역·시설명'})).toBeVisible();
+ await page.getByRole('button',{name:'지역·필터 설정'}).click();await page.getByLabel('기저귀 교환대 있음').uncheck();await page.getByRole('button',{name:'지역·필터 설정'}).click();
+ await page.getByLabel('지역·시설명').fill('강서구청');await page.screenshot({path:'/workspace/artifacts/nursing-map-first.png'});
+ await page.getByRole('button',{name:'시설 목록 펼치기'}).click();await expect(page.locator('.card').first()).toBeVisible();await page.locator('.card').filter({has:page.getByRole('heading',{name:'강서구청',exact:true})}).click();
+ const detail=page.getByRole('region',{name:'시설 상세'});expect((await detail.boundingBox())!.height).toBeLessThanOrEqual(844*.34+1);
+ await page.getByRole('button',{name:'상세 펼치기'}).click();await expect(page.getByRole('button',{name:'상세 접기'})).toHaveAttribute('aria-expanded','true');await detail.getByRole('link',{name:'카카오맵 길찾기'}).scrollIntoViewIfNeeded();await expect(detail.getByRole('link',{name:'카카오맵 길찾기'})).toBeInViewport();
+ await page.getByRole('button',{name:'상세 접기'}).click();await page.getByRole('button',{name:'상세 닫기'}).click();await page.getByRole('button',{name:'시설 목록 접기'}).click();
+ for(const viewport of [{width:360,height:640},{width:844,height:390}]){await page.setViewportSize(viewport);expect(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth)).toBe(false);await expect(page.getByRole('button',{name:'내 위치 확인'})).toBeInViewport();}
 });
