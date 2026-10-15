@@ -127,15 +127,15 @@ test('넓은 지도는 마커를 묶고 시설 선택 시 상세 제공',async({
 });
 test('세종은 카카오 장소검색 후보를 지도와 목록에 표시',async({page})=>{
  test.skip(!process.env.VITE_KAKAO_MAP_KEY,'지도 키가 없는 환경');await page.goto('/',{waitUntil:'domcontentloaded'});await page.getByRole('button',{name:'세종',exact:true}).click();
- await expect(page.locator('.card').first()).toBeVisible({timeout:30000});await expect(page.locator('.card').first()).toContainText('수유실 검색 후보');await expect(page.locator('.card').first()).toContainText('세종');
- await expect(page.getByText(/지도 표시 장소/)).toBeVisible();await page.locator('.card').first().click();const detail=page.getByRole('region',{name:'시설 상세'});await expect(detail.locator('.detail-category')).toContainText('카카오 장소검색');await expect(detail.getByText(/수유실이 확인된 시설로 보장하지/)).toBeVisible();await expect(detail.getByRole('link',{name:'카카오맵 길찾기'})).toBeVisible();
+ await expect(page.locator('.card').filter({hasText:'수유실 검색 후보'}).first()).toBeVisible({timeout:30000});await expect(page.locator('.card').filter({hasText:'수유실 검색 후보'}).first()).toContainText('수유실 검색 후보');await expect(page.locator('.card').filter({hasText:'수유실 검색 후보'}).first()).toContainText('세종');
+ await expect(page.getByText(/지도 표시 장소/)).toBeVisible();await page.locator('.card').filter({hasText:'수유실 검색 후보'}).first().click();const detail=page.getByRole('region',{name:'시설 상세'});await expect(detail.locator('.detail-category')).toContainText('카카오 장소검색');await expect(detail.getByText(/수유실이 확인된 시설로 보장하지/)).toBeVisible();await expect(detail.getByRole('link',{name:'카카오맵 길찾기'})).toBeVisible();
  await page.getByRole('tab',{name:'후기·제보'}).click();await expect(detail.getByText('검색 후보의 후기·제보는 아직 지원하지 않습니다.',{exact:false})).toBeVisible();
  await page.setViewportSize({width:390,height:844});await page.screenshot({path:'/workspace/artifacts/nursing-sejong-search.png'});
 });
 
 test('세종 현재 위치에서도 주변 검색 후보를 제공',async({page,context})=>{
  test.skip(!process.env.VITE_KAKAO_MAP_KEY,'지도 키가 없는 환경');await context.grantPermissions(['geolocation']);await context.setGeolocation({latitude:36.48,longitude:127.26});await page.goto('/',{waitUntil:'domcontentloaded'});await page.getByRole('button',{name:'내 위치 확인'}).click();
- await expect(page.locator('.card').first()).toContainText('수유실 검색 후보',{timeout:30000});await expect(page.locator('.card').first()).toContainText('세종');await expect(page.locator('.card').first()).toContainText('km');await expect(page.getByText(/내 주변 10km의 자료/)).toBeVisible();
+ await expect(page.locator('.card').filter({hasText:'수유실 검색 후보'}).first()).toContainText('수유실 검색 후보',{timeout:30000});await expect(page.locator('.card').filter({hasText:'수유실 검색 후보'}).first()).toContainText('세종');await expect(page.locator('.card').filter({hasText:'수유실 검색 후보'}).first()).toContainText('km');await expect(page.getByText(/내 주변 10km의 자료/)).toBeVisible();
 });
 
 
@@ -199,9 +199,18 @@ test('모바일 위치 안내와 검색어·필터가 있어도 지도 영역 �
   expect(await button.evaluate(el=>{const r=el.getBoundingClientRect();return el.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2));})).toBe(true);
   await button.click({trial:true});
  }
- await unobstructed();await button.click();await expect(page.getByText('현재 지도 영역의 좌표 확인 시설만 표시합니다.',{exact:false})).toBeVisible();await expect(page.getByLabel('지역·시설명')).toHaveValue('Ak');
+ await unobstructed();await button.click();await dragList(page,true);await expect(page.getByText('현재 지도 영역에서 새로 검색한 후보와 좌표 확인 시설을 표시합니다.',{exact:false})).toBeVisible();await expect(page.getByLabel('지역·시설명')).toHaveValue('');
  await page.getByRole('button',{name:'지역·필터 설정'}).click();await expect(page.getByLabel('기저귀 교환대 있음')).toBeVisible();await unobstructed();
  await page.setViewportSize({width:360,height:640});await unobstructed();
  await page.getByRole('button',{name:'지역·필터 설정'}).click();await unobstructed();
  await page.screenshot({path:'/workspace/artifacts/nursing-map-search-visible.png'});
+});
+
+
+test('AK 세종 누락 시설은 방문 후기 근거와 층·현재 확인 필요 안내로 제공한다',async({page})=>{
+ await page.goto('/');await page.getByLabel('지역·시설명').fill('AK 세종');
+ const card=page.locator('.card').filter({has:page.getByRole('heading',{name:'AK& 세종 수유실',exact:true})});await expect(card).toBeVisible();await expect(card).toContainText('방문 후기');await card.click();
+ const detail=page.getByRole('region',{name:'시설 상세'});await expect(detail.getByText('2층 H&M 인근 화장실 옆 (방문 후기 기준)',{exact:true})).toBeVisible();
+ const evidence=detail.getByRole('region',{name:'방문 후기 근거'});await expect(evidence).toContainText('시설의 공식 확인은 아니며');await expect(evidence).toContainText('2025-05-10');await expect(evidence.getByRole('link').first()).toHaveAttribute('href','https://blog.naver.com/honest_2sm/222967582820');await expect(detail.getByRole('link',{name:'방문 후기 찾기'})).toHaveAttribute('href',/^https:\/\/search.naver.com\//);
+ await expect(detail.getByText('현재 동반 보호자 출입 조건과 유모차 이동 동선은 시설에 확인해주세요.',{exact:true})).toBeVisible();await expect(detail.getByRole('button',{name:'AK& 세종 수유실 저장',exact:true})).toBeEnabled();
 });

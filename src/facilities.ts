@@ -1,4 +1,4 @@
-export type Facility = { id: string; name: string; address: string; latitude?: number; longitude?: number; isExample?: boolean; provider?:'kakao'; location?: string; phone?: string | null; sourceName?: string; sourceUrl?: string; sourceUpdatedAt?: string | null; access?:string; notes?:string; sourceStatus?:string; hours: string | null; changingTable: boolean | null };
+export type Facility = { id: string; name: string; address: string; latitude?: number; longitude?: number; isExample?: boolean; provider?:'kakao';sourceKind?:'visitor';aliases?:string[];evidence?:{url:string;date:string;label:string;summary:string}[]; roadAddress?:string; parcelAddress?:string; category?:string; location?: string; phone?: string | null; sourceName?: string; sourceUrl?: string; sourceUpdatedAt?: string | null; access?:string; notes?:string; sourceStatus?:string; hours: string | null; changingTable: boolean | null };
 // Synthetic fixtures: these are not real facilities or verified addresses.
 export const examples: Facility[] = [
  {isExample:true, id:'demo-1', name:'예시 A 수유실', address:'서울 · 가상 시설', hours:'평일 09:00–18:00 (예시)', changingTable:true},
@@ -6,8 +6,9 @@ export const examples: Facility[] = [
  {isExample:true, id:'demo-3', name:'예시 C 수유실', address:'서울 · 가상 시설', hours:null, changingTable:false},
 ];
 export function searchFacilities(items: Facility[], query: string, changingOnly: boolean, hoursKnown: boolean) {
- const q=query.trim().toLocaleLowerCase('ko');
- return items.filter(f => `${f.name} ${f.address}`.toLocaleLowerCase('ko').includes(q) && (!changingOnly || f.changingTable===true) && (!hoursKnown || f.hours!==null));
+ const normalize=(value:string)=>value.toLocaleLowerCase('ko').replace(/[\s&＆·.\-]/g,'');
+ const q=normalize(query.trim());
+ return items.filter(f => normalize(`${f.name} ${f.address} ${(f.aliases??[]).join(' ')}`).includes(q) && (!changingOnly || f.changingTable===true) && (!hoursKnown || f.hours!==null));
 }
 export type Position={latitude:number;longitude:number};
 export type Bounds={south:number;north:number;west:number;east:number};

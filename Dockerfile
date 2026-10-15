@@ -15,6 +15,7 @@ COPY --chown=node:node package.json package-lock.json ./
 RUN npm ci --omit=dev --no-audit --no-fund
 COPY --chown=node:node --from=build /app/dist ./dist
 COPY --chown=node:node --from=build /app/src/data/official.json ./src/data/official.json
+COPY --chown=node:node --from=build /app/src/data/visitor.json ./src/data/visitor.json
 COPY --chown=node:node server ./server
 USER node
 EXPOSE 3001

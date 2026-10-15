@@ -14,7 +14,8 @@ export async function initialize(){
  await pool.query('ALTER TABLE facilities ADD COLUMN IF NOT EXISTS source_url VARCHAR(255) NULL, ADD COLUMN IF NOT EXISTS is_active BOOLEAN NOT NULL DEFAULT TRUE');
  await pool.query('INSERT IGNORE INTO schema_migrations(version) VALUES(2)');
  const data=JSON.parse(fs.readFileSync(new URL('../src/data/official.json',import.meta.url),'utf8'));
- await syncFacilities(data.facilities,data.metadata.sources.map((s:any)=>s.sourceUrl));
+ const visitor=JSON.parse(fs.readFileSync(new URL('../src/data/visitor.json',import.meta.url),'utf8'));
+ await syncFacilities([...data.facilities,...visitor.facilities],[...data.metadata.sources.map((s:any)=>s.sourceUrl),...visitor.facilities.map((f:any)=>f.sourceUrl)]);
  await pool.query('DELETE FROM sessions WHERE expires_at < UTC_TIMESTAMP()');
  await pool.query('INSERT IGNORE INTO schema_migrations(version) VALUES(1)');
 }
