@@ -214,3 +214,13 @@ test('AK 세종 누락 시설은 방문 후기 근거와 층·현재 확인 필�
  const evidence=detail.getByRole('region',{name:'방문 후기 근거'});await expect(evidence).toContainText('시설의 공식 확인은 아니며');await expect(evidence).toContainText('2025-05-10');await expect(evidence.getByRole('link').first()).toHaveAttribute('href','https://blog.naver.com/honest_2sm/222967582820');await expect(detail.getByRole('link',{name:'방문 후기 찾기'})).toHaveAttribute('href',/^https:\/\/search.naver.com\//);
  await expect(detail.getByText('현재 동반 보호자 출입 조건과 유모차 이동 동선은 시설에 확인해주세요.',{exact:true})).toBeVisible();await expect(detail.getByRole('button',{name:'AK& 세종 수유실 저장',exact:true})).toBeEnabled();
 });
+
+test('세종 보완 시설은 검색·실내 위치·근거 수준을 구분해 제공한다',async({page})=>{
+ await page.goto('/');
+ for(const name of ['국립세종도서관 수유실','세종시립도서관 수유실','국립세종수목원 수유실','국립어린이박물관 수유실','이마트 세종점 수유실','홈플러스 세종점 수유실','코스트코 세종점 수유실','스타벅스 세종예술의전당점 수유실','대통령기록관 수유실']){
+  await page.getByLabel('지역·시설명').fill(name);const card=page.locator('.card').filter({has:page.getByRole('heading',{name,exact:true})});await expect(card).toHaveCount(1);await expect(card).toBeEnabled();
+ }
+ await page.getByLabel('지역·시설명').fill('국립세종수목원 수유실');await page.locator('.card').filter({has:page.getByRole('heading',{name:'국립세종수목원 수유실',exact:true})}).click();
+ const detail=page.getByRole('region',{name:'시설 상세'}),official=detail.getByRole('region',{name:'시설 안내 근거'});await expect(official).toContainText('시설 공식 안내');await expect(official).toContainText('안내 확인일 2026-10-15');await expect(detail.getByRole('link',{name:'044-251-0001'})).toHaveAttribute('href','tel:044-251-0001');await expect(detail.getByText(/방문자센터 1층·단풍정원/)).toBeVisible();
+ await page.getByRole('button',{name:'상세 닫기'}).click();await page.getByLabel('지역·시설명').fill('홈플러스 세종점 수유실');await page.locator('.card').filter({has:page.getByRole('heading',{name:'홈플러스 세종점 수유실',exact:true})}).click();await expect(detail.getByText('문화센터 안 · 후기의 층 표기가 1층/B1층으로 서로 다름',{exact:true})).toBeVisible();await expect(detail.getByText('세종특별자치시 절재로 154',{exact:true})).toBeVisible();
+});

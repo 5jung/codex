@@ -34,18 +34,20 @@ export function loadSDK(key:string):Promise<SDK>{
 }
 export function KakaoMap({facilities,selected,onSelect,position,onSearchBounds,viewKey,fitResults}:{viewKey:string;fitResults:boolean;facilities:Facility[];selected:Facility|null;onSelect:(f:Facility)=>void;position:Position|null;onSearchBounds:(b:Bounds)=>void}){
  const host=useRef<HTMLDivElement>(null);const [sdk,setSDK]=useState<SDK|null>(null);const [error,setError]=useState(false);const [attempt,setAttempt]=useState(0);const [ready,setReady]=useState(false);const instance=useRef<MapInstance|null>(null);
+ const latest=useRef(facilities);latest.current=facilities;
+ const markerKey=JSON.stringify(facilities.filter(f=>!f.isExample&&hasCoordinates(f)).map(f=>[f.id,f.name,f.latitude,f.longitude]));
  const view=useRef({key:'',fitted:false});
  const key=import.meta.env.VITE_KAKAO_MAP_KEY?.trim();
  useEffect(()=>{if(!key||!host.current)return;let active=true;setError(false);setReady(false);
  loadSDK(key).then(api=>{if(!active||!host.current)return;try{instance.current=new api.Map(host.current,{center:new api.LatLng(36.5,127.8),level:13});setSDK(api);setReady(true);}catch{setError(true);}}).catch(()=>{if(active)setError(true);});
  return()=>{active=false;instance.current=null;setSDK(null);};},[key,attempt]);
  useEffect(()=>{if(!sdk||!instance.current)return;const map=instance.current;const bounds=new sdk.LatLngBounds();
- const entries=facilities.filter(f=>!f.isExample&&hasCoordinates(f)).map(f=>{if(!hasCoordinates(f))throw new Error('Invalid coordinates');const position=new sdk.LatLng(f.latitude,f.longitude);bounds.extend(position);const marker=new sdk.Marker({map,position,title:f.name});const click=()=>onSelect(f);sdk.event.addListener(marker,'click',click);return {marker,click};});
+ const entries=facilities.filter(f=>!f.isExample&&hasCoordinates(f)).map(f=>{if(!hasCoordinates(f))throw new Error('Invalid coordinates');const position=new sdk.LatLng(f.latitude,f.longitude);bounds.extend(position);const marker=new sdk.Marker({map,position,title:f.name});const click=()=>{const current=latest.current.find(item=>item.id===f.id);if(current)onSelect(current);};sdk.event.addListener(marker,'click',click);return {marker,click};});
  if(view.current.key!==viewKey)view.current={key:viewKey,fitted:false};
  if(fitResults&&!view.current.fitted&&entries.length){map.setBounds(bounds);if(entries.length===1)map.setLevel(5);view.current.fitted=true;}
  const clusterer=new sdk.MarkerClusterer({map,averageCenter:true,minLevel:6,gridSize:70,styles:[{width:'42px',height:'42px',borderRadius:'50%',background:'#a65348',border:'3px solid white',color:'#ffffff',fontSize:'12px',fontWeight:'700',textAlign:'center',lineHeight:'36px',boxShadow:'0 3px 12px #1a47252b'}]});
  clusterer.addMarkers(entries.map(e=>e.marker));
- return()=>{clusterer.clear();entries.forEach(({marker,click})=>{sdk.event.removeListener(marker,'click',click);marker.setMap(null);});};},[sdk,facilities,onSelect,viewKey,fitResults]);
+ return()=>{clusterer.clear();entries.forEach(({marker,click})=>{sdk.event.removeListener(marker,'click',click);marker.setMap(null);});};},[sdk,markerKey,onSelect,viewKey,fitResults]);
  useEffect(()=>{if(sdk&&instance.current&&selected&&!selected.isExample&&hasCoordinates(selected)){instance.current.setLevel(Math.min(instance.current.getLevel(),5));instance.current.setCenter(new sdk.LatLng(selected.latitude,selected.longitude));}},[sdk,selected]);
  useEffect(()=>{if(!ready||!host.current)return;const observer=new ResizeObserver(()=>{const map=instance.current;if(map){const center=map.getCenter();map.relayout();map.setCenter(center);}});observer.observe(host.current);return()=>observer.disconnect();},[ready]);
  useEffect(()=>{if(!sdk||!instance.current||!position)return;const dot=new sdk.CustomOverlay({map:instance.current,position:new sdk.LatLng(position.latitude,position.longitude),content:'<span class="current-position-marker" role="img" aria-label="내 현재 위치" title="내 현재 위치"></span>',xAnchor:.5,yAnchor:.5,zIndex:5});return()=>dot.setMap(null);},[sdk,position]);

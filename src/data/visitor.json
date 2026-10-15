@@ -33,6 +33,289 @@
           "summary": "AK&의 2층 H&M 인근 수유실과 기저귀 교환대·전자레인지 등을 소개합니다."
         }
       ]
+    },
+    {
+      "id": "visitor-sejong-national-library",
+      "name": "국립세종도서관 수유실",
+      "address": "세종특별자치시 다솜3로 48",
+      "aliases": [
+        "세종 국립도서관",
+        "국립 세종 도서관"
+      ],
+      "sourceKind": "visitor",
+      "evidenceLevel": "visitor",
+      "location": "지하 1층 어린이자료실 구역 (방문 후기 기준)",
+      "hours": null,
+      "changingTable": null,
+      "sourceName": "공개 방문 후기 검토",
+      "sourceUrl": "https://blog.naver.com/bamcong_mom/224159489455",
+      "sourceUpdatedAt": "2026-05-26",
+      "access": "시설 입장·휴관일·보호자 동반 조건은 방문 전 확인해주세요.",
+      "notes": "세종시립도서관(세종로 1207)과 다른 시설입니다. 휴관일에는 접근할 수 없으므로 도서관 운영일을 확인해주세요.",
+      "evidence": [
+        {
+          "url": "https://blog.naver.com/bamcong_mom/224159489455",
+          "date": "2026-01-25",
+          "label": "국립세종도서관 층별 이용 후기",
+          "summary": "지하 1층 어린이자료실 구역의 수유실을 설명합니다."
+        },
+        {
+          "url": "https://blog.naver.com/ccomnyang/224297291960",
+          "date": "2026-05-26",
+          "label": "국립세종도서관 수유실 방문 후기",
+          "summary": "수유 공간과 기저귀 교환대·전자레인지 등의 이용 경험을 소개합니다."
+        }
+      ]
+    },
+    {
+      "id": "visitor-sejong-city-library",
+      "name": "세종시립도서관 수유실",
+      "address": "세종특별자치시 세종로 1207",
+      "aliases": [
+        "세종 시립도서관"
+      ],
+      "sourceKind": "visitor",
+      "evidenceLevel": "visitor",
+      "location": "1층 입구 화장실 옆 (방문 후기 기준)",
+      "hours": null,
+      "changingTable": null,
+      "sourceName": "공개 방문 후기 검토",
+      "sourceUrl": "https://blog.naver.com/bumine_life/224380620921",
+      "sourceUpdatedAt": "2026-08-16",
+      "access": "시설 입장·휴관일·보호자 동반 조건은 방문 전 확인해주세요.",
+      "notes": "국립세종도서관(다솜3로 48)과 구분해주세요. 도서관 운영일·해당 구역 개방 여부를 확인해주세요.",
+      "evidence": [
+        {
+          "url": "https://blog.naver.com/bumine_life/224380620921",
+          "date": "2026-08-16",
+          "label": "세종시립도서관 수유실 직접 이용 후기",
+          "summary": "1층 입구 화장실 옆 수유실을 이용한 경험과 도서관 주소를 안내합니다."
+        }
+      ]
+    },
+    {
+      "id": "visitor-sejong-arboretum",
+      "name": "국립세종수목원 수유실",
+      "address": "세종특별자치시 수목원로 136",
+      "aliases": [
+        "세종수목원",
+        "세종 수목원"
+      ],
+      "sourceKind": "visitor",
+      "evidenceLevel": "facility-guide",
+      "location": "방문자센터 1층·단풍정원·사계절전시온실·치유정원 화장실 구역 (시설 안내)",
+      "hours": "시설 안내 09:00~18:00 · 계절별 관람시간·휴원일 확인 필요",
+      "changingTable": null,
+      "sourceName": "시설 공식 안내",
+      "sourceUrl": "https://www.koagi.or.kr/sjna/user/fdShpInfo/BD_selectFdShp.do?q_siteSeq=3&q_fdShpNo=8",
+      "sourceUpdatedAt": null,
+      "access": "시설 입장·휴관일·보호자 동반 조건은 방문 전 확인해주세요.",
+      "notes": "여러 실내 구역을 하나의 시설로 묶어 표시합니다. 지도 점은 건물 주소 기준으로 실제 수유실 네 곳의 좌표가 아닙니다. 입장권·휴원일·해당 구역의 당일 운영 여부를 확인해주세요.",
+      "evidence": [
+        {
+          "url": "https://www.koagi.or.kr/sjna/user/fdShpInfo/BD_selectFdShp.do?q_siteSeq=3&q_fdShpNo=8",
+          "date": "2026-10-15",
+          "label": "국립세종수목원 공식 수유실 안내",
+          "summary": "공식 안내에 수유실 위치 네 구역과 운영시간 09:00~18:00이 기재되어 있습니다.",
+          "dateKind": "checked"
+        }
+      ],
+      "phone": "044-251-0001"
+    },
+    {
+      "id": "visitor-sejong-childrens-museum",
+      "name": "국립어린이박물관 수유실",
+      "address": "세종특별자치시 어울누리로 130",
+      "aliases": [
+        "세종어린이박물관",
+        "세종 어린이박물관"
+      ],
+      "sourceKind": "visitor",
+      "evidenceLevel": "facility-guide",
+      "location": "지상 1층 수유실 (시설 층별 안내)",
+      "hours": null,
+      "changingTable": null,
+      "sourceName": "시설 공식 안내",
+      "sourceUrl": "https://child.nmcik.or.kr/tour/guide/floor",
+      "sourceUpdatedAt": null,
+      "access": "시설 입장·휴관일·보호자 동반 조건은 방문 전 확인해주세요.",
+      "notes": "박물관 관람·예약 및 수유실 접근 조건을 확인해주세요. 기저귀 교환 위치는 수유실과 별도일 수 있어 현장 안내를 확인해야 합니다.",
+      "evidence": [
+        {
+          "url": "https://child.nmcik.or.kr/tour/guide/floor",
+          "date": "2026-10-15",
+          "label": "국립어린이박물관 공식 층별 안내",
+          "summary": "지상 1층 편의시설에 수유실이 표시되어 있습니다.",
+          "dateKind": "checked"
+        },
+        {
+          "url": "https://blog.naver.com/rosysuede/224338563424",
+          "date": "2026-07-06",
+          "label": "국립어린이박물관 아기 동반 방문 후기",
+          "summary": "1층 수유실을 안내하며 기저귀 교환은 화장실을 이용했다고 설명합니다."
+        }
+      ],
+      "phone": "044-251-3000"
+    },
+    {
+      "id": "visitor-emart-sejong",
+      "name": "이마트 세종점 수유실",
+      "address": "세종특별자치시 금송로 687",
+      "aliases": [
+        "세종 이마트",
+        "이마트세종점"
+      ],
+      "sourceKind": "visitor",
+      "evidenceLevel": "visitor",
+      "location": "2층 엘리베이터 인근 (방문 후기 기준)",
+      "hours": null,
+      "changingTable": null,
+      "sourceName": "공개 방문 후기 검토",
+      "sourceUrl": "https://blog.naver.com/plaingelatto/224038551878",
+      "sourceUpdatedAt": "2025-10-12",
+      "access": "시설 입장·휴관일·보호자 동반 조건은 방문 전 확인해주세요.",
+      "notes": "마트 영업일·휴무일과 수유실 당일 운영 여부를 확인해주세요. 후기의 청결·시설 상태는 작성 당시의 경험입니다.",
+      "evidence": [
+        {
+          "url": "https://blog.naver.com/plaingelatto/224038551878",
+          "date": "2025-10-12",
+          "label": "이마트 세종점 수유실 이용 후기",
+          "summary": "2층 엘리베이터 근처 수유실의 위치와 이용 경험을 설명합니다."
+        }
+      ]
+    },
+    {
+      "id": "visitor-homeplus-sejong",
+      "name": "홈플러스 세종점 수유실",
+      "address": "세종특별자치시 절재로 154",
+      "aliases": [
+        "세종 홈플러스",
+        "홈플러스세종점"
+      ],
+      "sourceKind": "visitor",
+      "evidenceLevel": "visitor",
+      "location": "문화센터 안 · 후기의 층 표기가 1층/B1층으로 서로 다름",
+      "hours": null,
+      "changingTable": null,
+      "sourceName": "공개 방문 후기 검토",
+      "sourceUrl": "https://blog.naver.com/jujuhome24/224286666724",
+      "sourceUpdatedAt": "2026-05-15",
+      "access": "시설 입장·휴관일·보호자 동반 조건은 방문 전 확인해주세요.",
+      "notes": "문화센터라는 위치는 일치하지만 층 표기가 달라 단일 층으로 확정하지 않았습니다. 종촌동 도움1로의 다른 매장과 혼동하지 말고 절재로 154인지 확인해주세요. 매장·문화센터의 현재 운영 여부도 확인해주세요.",
+      "evidence": [
+        {
+          "url": "https://blog.naver.com/jujuhome24/224286666724",
+          "date": "2026-05-15",
+          "label": "홈플러스 세종점 문화센터 유아휴게실 후기",
+          "summary": "절재로 154의 문화센터 내 유아휴게실을 1층으로 안내합니다."
+        },
+        {
+          "url": "https://blog.naver.com/s00c00/224027492768",
+          "date": "2025-09-30",
+          "label": "세종 수유실 이용 장소 모음 후기",
+          "summary": "문화센터 안 수유실을 안내하지만 B1층으로 표기해 층수 대조가 필요합니다."
+        }
+      ]
+    },
+    {
+      "id": "visitor-costco-sejong",
+      "name": "코스트코 세종점 수유실",
+      "address": "세종특별자치시 종합운동장1로 14",
+      "aliases": [
+        "세종 코스트코",
+        "코스트코코리아 세종점"
+      ],
+      "sourceKind": "visitor",
+      "evidenceLevel": "visitor",
+      "location": "푸드코트 인근 화장실 맞은편 (방문 후기 기준)",
+      "hours": null,
+      "changingTable": null,
+      "sourceName": "공개 방문 후기 검토",
+      "sourceUrl": "https://blog.naver.com/gyhy241109/224438474941",
+      "sourceUpdatedAt": "2026-10-12",
+      "access": "시설 입장·휴관일·보호자 동반 조건은 방문 전 확인해주세요.",
+      "notes": "회원·동반 입장 조건과 수유실 접근 경로를 매장에 확인해주세요. 후기에는 완전히 독립된 모유수유 공간이 아니라는 설명이 있어 프라이버시 조건을 확인하는 것이 좋습니다.",
+      "evidence": [
+        {
+          "url": "https://blog.naver.com/gyhy241109/224438474941",
+          "date": "2026-10-12",
+          "label": "코스트코 세종점 수유실 이용 후기",
+          "summary": "푸드코트 인근 화장실 맞은편의 수유 공간과 간이 교환대를 소개합니다."
+        },
+        {
+          "url": "https://blog.naver.com/s00c00/224027492768",
+          "date": "2025-09-30",
+          "label": "코스트코 세종점 수유실 동선 후기",
+          "summary": "푸드코트 구역의 위치와 편의시설을 설명하며 수유 공간의 개방성을 언급합니다."
+        }
+      ]
+    },
+    {
+      "id": "visitor-starbucks-sejong-art",
+      "name": "스타벅스 세종예술의전당점 수유실",
+      "address": "세종특별자치시 나성동로 6",
+      "aliases": [
+        "세종 스벅",
+        "세종예술의전당 스타벅스"
+      ],
+      "sourceKind": "visitor",
+      "evidenceLevel": "visitor",
+      "location": "1층 출입구 인근 가족휴게실 (방문 후기 기준)",
+      "hours": null,
+      "changingTable": null,
+      "sourceName": "공개 방문 후기 검토",
+      "sourceUrl": "https://blog.naver.com/ae5bak/224418321659",
+      "sourceUpdatedAt": "2026-09-21",
+      "access": "시설 입장·휴관일·보호자 동반 조건은 방문 전 확인해주세요.",
+      "notes": "세종예술의전당 공연장 내부가 아니라 나성동로 6의 스타벅스 매장입니다. 매장 이용·수유실 출입 조건을 확인해주세요.",
+      "evidence": [
+        {
+          "url": "https://blog.naver.com/ae5bak/224418321659",
+          "date": "2026-09-21",
+          "label": "세종예술의전당점 가족 편의시설 방문 후기",
+          "summary": "나성동로 6 매장 입구 인근 수유실과 어린이 화장실을 안내합니다."
+        },
+        {
+          "url": "https://blog.naver.com/s00c00/224027492768",
+          "date": "2025-09-30",
+          "label": "세종예술의전당점 가족휴게실 이용 후기",
+          "summary": "입구 왼편 가족휴게실의 수유 공간과 기저귀 교환대를 소개합니다."
+        }
+      ]
+    },
+    {
+      "id": "visitor-presidential-archives",
+      "name": "대통령기록관 수유실",
+      "address": "세종특별자치시 다솜로 250",
+      "aliases": [
+        "세종 대통령기록관"
+      ],
+      "sourceKind": "visitor",
+      "evidenceLevel": "facility-guide",
+      "location": "전시관 1층 구름다리 건너 사무동 구역 (방문 후기 기준)",
+      "hours": null,
+      "changingTable": null,
+      "sourceName": "시설 공식 안내",
+      "sourceUrl": "https://pa.go.kr/files/2025_%EA%B5%AD%EB%AC%B8_%EB%A6%AC%ED%94%8C%EB%A6%BF.pdf",
+      "sourceUpdatedAt": null,
+      "access": "시설 입장·휴관일·보호자 동반 조건은 방문 전 확인해주세요.",
+      "notes": "수유실 존재는 공식 리플릿, 사무동 동선은 방문 후기를 근거로 합니다. 사무동의 다른 시설 운영시간을 수유실에 동일하게 적용하지 않으며 당일 출입·운영 여부를 확인해주세요.",
+      "evidence": [
+        {
+          "url": "https://pa.go.kr/files/2025_%EA%B5%AD%EB%AC%B8_%EB%A6%AC%ED%94%8C%EB%A6%BF.pdf",
+          "date": "2026-10-15",
+          "label": "대통령기록관 2025년 공식 관람 리플릿",
+          "summary": "공식 리플릿의 편의시설 항목에 수유실 이용 가능이 기재되어 있습니다.",
+          "dateKind": "checked"
+        },
+        {
+          "url": "https://blog.naver.com/tobehonest__/224013066130",
+          "date": "2025-09-18",
+          "label": "대통령기록관 부대시설 위치 후기",
+          "summary": "수유실이 전시관 1층 구름다리 건너 사무동 구역에 있다고 안내합니다."
+        }
+      ],
+      "phone": "044-211-2000"
     }
   ]
 }
