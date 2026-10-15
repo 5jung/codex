@@ -30,7 +30,7 @@ docker compose --env-file /secure/nursing-beta.env build
 docker compose --env-file /secure/nursing-beta.env --profile https up -d
 ```
 
-현재 클라우드처럼 빌드 네트워크에 프록시가 있으면 HTTP_PROXY/HTTPS_PROXY/NO_PROXY를 Docker 표준 build arg로 전달하고, 환경이 제공한 CA bundle을 `proxy_ca` BuildKit secret으로 제공해야 한다. Dockerfile은 해당 CA로 npm TLS 검증을 유지한다. 일반 서버에서는 이 secret이 필요하지 않다. HOME 쓰기가 제한된 환경은 BUILDX_CONFIG를 작업공간의 쓰기 가능한 경로로 지정한다. 프록시 값·키 값이 들어간 명령을 출력하거나 HAR/trace를 저장하지 않는다.
+현재 클라우드처럼 빌드 네트워크에 프록시가 있으면 HTTP_PROXY/HTTPS_PROXY/NO_PROXY를 Docker 표준 build arg로 전달하고, 환경이 제공한 CA bundle을 `proxy_ca` BuildKit secret으로 제공해야 한다. 일반 배포 Dockerfile에는 클라우드 전용 secret mount를 포함하지 않는다. 현재 Codex 클라우드에서 이미지 빌드가 필요하면 `-f deploy/Dockerfile.cloud-dev`와 proxy_ca secret을 사용하며 해당 CA로 npm TLS 검증을 유지한다. 일반 서버에서는 이 secret이 필요하지 않다. HOME 쓰기가 제한된 환경은 BUILDX_CONFIG를 작업공간의 쓰기 가능한 경로로 지정한다. 프록시 값·키 값이 들어간 명령을 출력하거나 HAR/trace를 저장하지 않는다.
 
 카카오 개발자 콘솔에 실제 HTTPS 도메인을 등록하고 가입·로그인·복구·탈퇴·후기·신고·제보·검토·길찾기를 실제 테스트 도메인에서 다시 확인한다. 초대 자격정보와 앱 계정은 별개다. 검색 로봇 차단 헤더는 접근 인증을 대신하지 않는다.
 
