@@ -1,0 +1,54 @@
+services:
+  db:
+    image: mariadb@sha256:1292844148b311e4ed4300022a996d39083f415a963e970cf47cad1b3b18e3a6
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?Set DB_ROOT_PASSWORD}
+      MARIADB_DATABASE: nursing
+      MARIADB_USER: nursing
+      MARIADB_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD}
+    volumes:
+      - beta-db:/var/lib/mysql
+    healthcheck:
+      test: [CMD, healthcheck.sh, --connect, --innodb_initialized]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+  app:
+    image: nursing-private-beta:local
+    build:
+      context: .
+      args:
+        VITE_KAKAO_MAP_KEY: ${VITE_KAKAO_MAP_KEY:?Set the browser SDK key}
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - 127.0.0.1:${BETA_PORT:-8080}:3001
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_NAME: nursing
+      DB_USER: nursing
+      DB_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD}
+      APP_ORIGINS: ${APP_ORIGINS:?Set the HTTPS application origin}
+      PRIVATE_BETA: 'true'
+      BETA_USER: ${BETA_USER:?Set the invitation user}
+      BETA_PASSWORD: ${BETA_PASSWORD:?Set the invitation password}
+  https:
+    image: caddy:2.10.2-alpine
+    profiles: [https]
+    restart: unless-stopped
+    depends_on: [app]
+    ports: ['80:80', '443:443']
+    environment:
+      BETA_DOMAIN: ${BETA_DOMAIN:-beta.example.com}
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+volumes:
+  beta-db:
+  caddy-data:
+  caddy-config:

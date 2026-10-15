@@ -1,0 +1,2 @@
+import { defineConfig } from '@playwright/test';
+export default defineConfig({testDir:'./e2e',workers:1,use:{baseURL:'http://localhost:5173',launchOptions:{executablePath:'/usr/bin/chromium',args:['--no-sandbox','--disable-dev-shm-usage']},headless:true,...(process.env.HTTPS_PROXY?{proxy:{server:process.env.HTTPS_PROXY,bypass:'localhost,127.0.0.1'}}:{})},webServer:{command:'npm run dev -- --port 5173 --strictPort',url:'http://localhost:5173',reuseExistingServer:true},timeout:30000});
