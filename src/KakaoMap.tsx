@@ -5,7 +5,9 @@ import { hasCoordinates } from './map';
 type Point = object;
 type MapInstance = {getLevel():number;setLevel(level:number):void;setCenter(p:Point):void; setBounds(b:object):void; relayout():void; getBounds():{getSouthWest():{getLat():number;getLng():number};getNorthEast():{getLat():number;getLng():number}}};
 type MarkerInstance = {setMap(m:MapInstance|null):void};
-type SDK = {
+export type KakaoPlace={id:string;place_name:string;address_name:string;road_address_name:string;phone:string;x:string;y:string;place_url:string};
+export type SDK = {
+ services:{SortBy:{DISTANCE:string};Places:new()=>{keywordSearch(query:string,callback:(data:KakaoPlace[],status:string,pagination:{totalCount:number})=>void,options:{size:number;page:number;location?:Point;radius?:number;sort?:string}):void};Status:{OK:string;ZERO_RESULT:string}};
  load(fn:()=>void):void;
  LatLng:new(lat:number,lng:number)=>Point;
  LatLngBounds:new()=>{extend(p:Point):void};
@@ -16,13 +18,13 @@ type SDK = {
 };
 declare global {interface Window {kakao?:{maps:SDK}}}
 let pending:Promise<SDK>|null=null;
-function loadSDK(key:string):Promise<SDK>{
+export function loadSDK(key:string):Promise<SDK>{
  if(pending)return pending;
  pending=new Promise<SDK>((resolve,reject)=>{
   const script=document.createElement('script');
   const timer=setTimeout(()=>fail(),15000);
   function fail(){clearTimeout(timer);script.remove();reject(new Error('지도 SDK를 불러오지 못했습니다.'));}
-  script.src=`https://dapi.kakao.com/v2/maps/sdk.js?appkey=${encodeURIComponent(key)}&autoload=false&libraries=clusterer`;
+  script.src=`https://dapi.kakao.com/v2/maps/sdk.js?appkey=${encodeURIComponent(key)}&autoload=false&libraries=clusterer,services`;
   script.onerror=fail;
   script.onload=()=>{const sdk=window.kakao?.maps;if(!sdk){fail();return;}sdk.load(()=>{clearTimeout(timer);resolve(sdk);});};
   document.head.appendChild(script);
@@ -44,5 +46,5 @@ export function KakaoMap({facilities,selected,onSelect,position,onSearchBounds}:
  useEffect(()=>{if(sdk&&instance.current&&selected&&!selected.isExample&&hasCoordinates(selected)){instance.current.setLevel(Math.min(instance.current.getLevel(),5));instance.current.setCenter(new sdk.LatLng(selected.latitude,selected.longitude));}},[sdk,selected,facilities]);
  useEffect(()=>{if(!ready||!host.current)return;const observer=new ResizeObserver(()=>instance.current?.relayout());observer.observe(host.current);return()=>observer.disconnect();},[ready]);
  useEffect(()=>{if(sdk&&instance.current&&position)instance.current.setCenter(new sdk.LatLng(position.latitude,position.longitude));},[sdk,position]);
- return <section className="map-panel" aria-label="카카오 지도"><h2>수유실 지도</h2><div className="map-canvas" ref={host}/>{!key?<div className="map-error map-loading" role="status"><p>지도를 준비하고 있어요. 시설 정보는 목록에서 확인할 수 있습니다.</p></div>:<>{ready&&<><button className="map-search-button" onClick={()=>{const b=instance.current?.getBounds();if(!b)return;const sw=b.getSouthWest(),ne=b.getNorthEast();onSearchBounds({south:sw.getLat(),west:sw.getLng(),north:ne.getLat(),east:ne.getLng()});}}><Icon name="locate" size={15}/>이 지도 영역에서 찾기</button><div className="map-zoom"><button aria-label="지도 확대" onClick={()=>{const m=instance.current;if(m)m.setLevel(Math.max(1,m.getLevel()-1));}}>+</button><button aria-label="지도 축소" onClick={()=>{const m=instance.current;if(m)m.setLevel(Math.min(14,m.getLevel()+1));}}>−</button></div></>}{error?<div className="map-error" role="alert"><p>지도를 불러오지 못했어요. 목록을 이용하거나 다시 시도해주세요.</p><button onClick={()=>setAttempt(a=>a+1)}>지도 다시 시도</button></div>:!ready?<div className="map-error map-loading" role="status"><p>주변 지도를 불러오고 있어요.</p></div>:<p className="map-status">지도 표시 시설 {facilities.filter(f=>!f.isExample&&hasCoordinates(f)).length}곳 · 좌표 없는 시설은 목록 제공</p>}</>}</section>;
+ return <section className="map-panel" aria-label="카카오 지도"><h2>수유실 지도</h2><div className="map-canvas" ref={host}/>{!key?<div className="map-error map-loading" role="status"><p>지도를 준비하고 있어요. 시설 정보는 목록에서 확인할 수 있습니다.</p></div>:<>{ready&&<><button className="map-search-button" onClick={()=>{const b=instance.current?.getBounds();if(!b)return;const sw=b.getSouthWest(),ne=b.getNorthEast();onSearchBounds({south:sw.getLat(),west:sw.getLng(),north:ne.getLat(),east:ne.getLng()});}}><Icon name="locate" size={15}/>이 지도 영역에서 찾기</button><div className="map-zoom"><button aria-label="지도 확대" onClick={()=>{const m=instance.current;if(m)m.setLevel(Math.max(1,m.getLevel()-1));}}>+</button><button aria-label="지도 축소" onClick={()=>{const m=instance.current;if(m)m.setLevel(Math.min(14,m.getLevel()+1));}}>−</button></div></>}{error?<div className="map-error" role="alert"><p>지도를 불러오지 못했어요. 목록을 이용하거나 다시 시도해주세요.</p><button onClick={()=>setAttempt(a=>a+1)}>지도 다시 시도</button></div>:!ready?<div className="map-error map-loading" role="status"><p>주변 지도를 불러오고 있어요.</p></div>:<p className="map-status">지도 표시 {facilities.some(f=>f.provider==='kakao')?'장소':'시설'} {facilities.filter(f=>!f.isExample&&hasCoordinates(f)).length}곳 · 좌표 없는 시설은 목록 제공</p>}</>}</section>;
 }

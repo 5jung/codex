@@ -117,3 +117,15 @@ test('넓은 지도는 마커를 묶고 시설 선택 시 상세 제공',async({
  await expect.poll(()=>page.locator('.map-canvas').evaluate(el=>[...el.querySelectorAll('div')].filter(d=>d.style.backgroundColor==='rgb(32, 107, 83)'&&/^\d+$/.test(d.textContent??'')).length),{timeout:15000}).toBeGreaterThan(0);
  await page.getByLabel('지역·시설명').fill('강서구청');await page.locator('.card').filter({has:page.getByRole('heading',{name:'강서구청',exact:true})}).click();await expect(page.getByRole('region',{name:'시설 상세'}).getByRole('heading',{name:'강서구청',exact:true})).toBeVisible();
 });
+test('세종은 카카오 장소검색 후보를 지도와 목록에 표시',async({page})=>{
+ test.skip(!process.env.VITE_KAKAO_MAP_KEY,'지도 키가 없는 환경');await page.goto('/',{waitUntil:'domcontentloaded'});await page.getByRole('button',{name:'세종',exact:true}).click();
+ await expect(page.locator('.card').first()).toBeVisible({timeout:30000});await expect(page.locator('.card').first()).toContainText('수유실 검색 후보');await expect(page.locator('.card').first()).toContainText('세종');
+ await expect(page.getByText(/지도 표시 장소/)).toBeVisible();await page.locator('.card').first().click();const detail=page.getByRole('region',{name:'시설 상세'});await expect(detail.locator('.detail-category')).toContainText('카카오 장소검색');await expect(detail.getByText(/수유실이 확인된 시설로 보장하지/)).toBeVisible();await expect(detail.getByRole('link',{name:'카카오맵 길찾기'})).toBeVisible();
+ await page.getByRole('tab',{name:'후기·제보'}).click();await expect(detail.getByText('검색 후보의 후기·제보는 아직 지원하지 않습니다.',{exact:false})).toBeVisible();
+ await page.setViewportSize({width:390,height:844});await page.screenshot({path:'/workspace/artifacts/nursing-sejong-search.png'});
+});
+
+test('세종 현재 위치에서도 주변 검색 후보를 제공',async({page,context})=>{
+ test.skip(!process.env.VITE_KAKAO_MAP_KEY,'지도 키가 없는 환경');await context.grantPermissions(['geolocation']);await context.setGeolocation({latitude:36.48,longitude:127.26});await page.goto('/',{waitUntil:'domcontentloaded'});await page.getByRole('button',{name:'내 위치 확인'}).click();
+ await expect(page.locator('.card').first()).toContainText('수유실 검색 후보',{timeout:30000});await expect(page.locator('.card').first()).toContainText('세종');await expect(page.locator('.card').first()).toContainText('km');await expect(page.getByText(/내 주변 10km의 자료/)).toBeVisible();
+});

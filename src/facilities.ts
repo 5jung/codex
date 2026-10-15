@@ -1,4 +1,4 @@
-export type Facility = { id: string; name: string; address: string; latitude?: number; longitude?: number; isExample?: boolean; location?: string; phone?: string | null; sourceName?: string; sourceUrl?: string; sourceUpdatedAt?: string | null; access?:string; notes?:string; sourceStatus?:string; hours: string | null; changingTable: boolean | null };
+export type Facility = { id: string; name: string; address: string; latitude?: number; longitude?: number; isExample?: boolean; provider?:'kakao'; location?: string; phone?: string | null; sourceName?: string; sourceUrl?: string; sourceUpdatedAt?: string | null; access?:string; notes?:string; sourceStatus?:string; hours: string | null; changingTable: boolean | null };
 // Synthetic fixtures: these are not real facilities or verified addresses.
 export const examples: Facility[] = [
  {isExample:true, id:'demo-1', name:'예시 A 수유실', address:'서울 · 가상 시설', hours:'평일 09:00–18:00 (예시)', changingTable:true},
