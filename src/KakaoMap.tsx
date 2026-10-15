@@ -40,7 +40,7 @@ export function KakaoMap({facilities,selected,onSelect,position,onSearchBounds}:
  useEffect(()=>{if(!sdk||!instance.current)return;const map=instance.current;const bounds=new sdk.LatLngBounds();
  const entries=facilities.filter(f=>!f.isExample&&hasCoordinates(f)).map(f=>{if(!hasCoordinates(f))throw new Error('Invalid coordinates');const position=new sdk.LatLng(f.latitude,f.longitude);bounds.extend(position);const marker=new sdk.Marker({map,position,title:f.name});const click=()=>onSelect(f);sdk.event.addListener(marker,'click',click);return {marker,click};});
  if(entries.length)map.setBounds(bounds);
- const clusterer=new sdk.MarkerClusterer({map,averageCenter:true,minLevel:6,gridSize:70,styles:[{width:'42px',height:'42px',borderRadius:'50%',background:'#206b53',border:'3px solid white',color:'#ffffff',fontSize:'12px',fontWeight:'700',textAlign:'center',lineHeight:'36px',boxShadow:'0 3px 12px #1a47252b'}]});
+ const clusterer=new sdk.MarkerClusterer({map,averageCenter:true,minLevel:6,gridSize:70,styles:[{width:'42px',height:'42px',borderRadius:'50%',background:'#a65348',border:'3px solid white',color:'#ffffff',fontSize:'12px',fontWeight:'700',textAlign:'center',lineHeight:'36px',boxShadow:'0 3px 12px #1a47252b'}]});
  clusterer.addMarkers(entries.map(e=>e.marker));
  return()=>{clusterer.clear();entries.forEach(({marker,click})=>{sdk.event.removeListener(marker,'click',click);marker.setMap(null);});};},[sdk,facilities,onSelect]);
  useEffect(()=>{if(sdk&&instance.current&&selected&&!selected.isExample&&hasCoordinates(selected)){instance.current.setLevel(Math.min(instance.current.getLevel(),5));instance.current.setCenter(new sdk.LatLng(selected.latitude,selected.longitude));}},[sdk,selected,facilities]);

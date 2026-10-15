@@ -1,7 +1,8 @@
-import {useState,useMemo,useEffect,useCallback,useRef} from 'react';
+import {useState,useMemo,useEffect,useCallback,useRef,type CSSProperties} from 'react';
 import {createRoot} from 'react-dom/client';
 import {examples,searchFacilities,distanceKm,inBounds,type Facility,type Position,type Bounds} from './facilities';
 import './style.css';
+import './theme.css';
 import official from './data/official.json';
 import {KakaoMap} from './KakaoMap';
 import {directionsUrl,hasCoordinates} from './map';
@@ -11,6 +12,7 @@ import {Admin} from './Admin';
 import {api,type User} from './api';
 import {Icon} from './Icon';
 import {useBookmarks} from './useBookmarks';
+import {useSheetDrag} from './useSheetDrag';
 import {usePlaceSearch} from './usePlaceSearch';
 function App(){
  const [demo,setDemo]=useState(false),[position,setPosition]=useState<Position|null>(null),[bounds,setBounds]=useState<Bounds|null>(null);
@@ -20,6 +22,7 @@ function App(){
  const [filtersOpen,setFiltersOpen]=useState(false),[mapOnly,setMapOnly]=useState(false),[detailExpanded,setDetailExpanded]=useState(false);
  const detailRef=useRef<HTMLElement>(null),accountDialog=useRef<HTMLDialogElement>(null),infoDialog=useRef<HTMLDialogElement>(null);
  const bookmarks=useBookmarks();
+ const sheet=useSheetDrag(listOpen,setListOpen);
  const refresh=useCallback(()=>{api<Facility[]>('/facilities').then(f=>{if(!Array.isArray(f)||f.some(x=>typeof x.id!=='string'||typeof x.name!=='string'))throw new Error('잘못된 시설 응답');setFacilities(f);setDataNotice('');setSelected(s=>s?.provider==='kakao'?s:s?f.find(x=>x.id===s.id)??null:null);}).catch(()=>setDataNotice('서버에 연결하지 못해 공개 원본을 표시합니다. 승인된 수정 정보는 불러오지 못했습니다.'));},[]);
  useEffect(()=>{refresh();},[refresh]);
  const localMatches=useMemo(()=>searchFacilities(demo?examples:facilities,query,false,false),[demo,facilities,query]);
@@ -45,14 +48,14 @@ function App(){
  function switchData(example:boolean){setDemo(example);reset();setSavedOnly(false);infoDialog.current?.close();}
  return <div className="app-shell">
   <header className="app-header">
-   <a className="brand" href="#" onClick={e=>{e.preventDefault();reset();setSavedOnly(false);}} aria-label="수유실 지도 처음으로"><span className="brand-mark"><Icon name="baby" size={26}/></span><span>수유실 지도<small>아이와 함께, 편안한 외출</small></span></a>
+   <a className="brand" href="#" onClick={e=>{e.preventDefault();reset();setSavedOnly(false);}} aria-label="수유실 지도 처음으로"><span className="brand-mark"><span className="bear-face" aria-hidden="true"><i/><b/></span></span><span>수유실 지도<small>아이와 함께, 편안한 외출</small></span></a>
    <div className="header-caption"><span className="live-dot"/>우리 곁의 작은 쉼표</div>
    <nav className="header-actions" aria-label="서비스 메뉴"><button className={`nav-button ${savedOnly?'active':''}`} aria-pressed={savedOnly} onClick={()=>{setMapOnly(false);setSavedOnly(s=>!s);setSelected(null);setListOpen(true);}}><Icon name="heart"/><span>저장한 장소</span><span className="count-badge">{bookmarks.ids.length}</span></button><button className="icon-button" aria-label="이용 안내" onClick={()=>infoDialog.current?.showModal()}><Icon name="info"/></button><button className="profile-button" aria-label="내 계정 열기" onClick={()=>accountDialog.current?.showModal()}><Icon name="user"/><span>{user?user.handle:'로그인'}</span></button></nav>
   </header>
-  <main className={`workspace ${selected?'has-selection':''} ${listOpen?'list-open':'list-closed'} ${filtersOpen?'filters-open':''} ${mapOnly?'map-only':''} ${detailExpanded?'detail-expanded':''}`}>
+  <main style={sheet.height===null?undefined:{'--list-height':`${sheet.height}px`} as CSSProperties} className={`workspace ${selected?'has-selection':''} ${listOpen?'list-open':'list-closed'} ${filtersOpen?'filters-open':''} ${mapOnly?'map-only':''} ${detailExpanded?'detail-expanded':''} ${sheet.height!==null?'sheet-dragging':''}`}>
    <aside className="explorer" aria-label="수유실 탐색">
     <section className="search-zone" aria-label="수유실 검색">
-     <div className="section-eyebrow">FIND YOUR LITTLE REST</div><h1>{savedOnly?'다시 찾고 싶은 곳':'어디에서 찾으세요?'}</h1><p className="search-description">{savedOnly?'이 기기에 저장한 수유실을 모았어요.':'가까운 수유실, 필요한 정보를 한눈에.'}</p>
+     <div className="section-eyebrow">A LITTLE REST, A LITTLE LOVE</div><h1>{savedOnly?'다시 찾고 싶은 곳':'어디에서 찾으세요?'}</h1><p className="search-description">{savedOnly?'이 기기에 저장한 수유실을 모았어요.':'아기와 나를 위한 작은 쉼표를 찾아요.'}</p>
      <div className="search-toolbar"><div className="search-field"><Icon name="search"/><label className="sr-only" htmlFor="query">지역·시설명</label><input id="query" value={query} onChange={e=>region(e.target.value)} placeholder="지역이나 시설 이름으로 검색" autoComplete="off"/>{query&&<button className="icon-button" aria-label="검색어 지우기" onClick={()=>region('')}><Icon name="close" size={16}/></button>}</div><button className={`filter-toggle ${changing||hours?'active':''}`} aria-label="지역·필터 설정" aria-expanded={filtersOpen} aria-controls="search-options" onClick={()=>setFiltersOpen(v=>!v)}><Icon name="filter" size={19}/><span>필터{changing||hours?` · ${Number(changing)+Number(hours)}`:''}</span></button></div>
      <div id="search-options" className="search-options"><div className="region-chips" aria-label="제공 지역">{['전체','세종','부산','성남','제주','인천','대구'].map(r=><button key={r} className={!bounds&&query===(r==='전체'?'':r)?'region-chip active':'region-chip'} onClick={()=>region(r==='전체'?'':r)} aria-pressed={!bounds&&query===(r==='전체'?'':r)}>{r}</button>)}</div>
      <div className="filter-row"><label className={`filter-chip ${changing?'checked':''}`}><input type="checkbox" checked={changing} onChange={e=>{setChanging(e.target.checked);setSelected(null);}}/><Icon name="baby" size={16}/><span>기저귀 교환대 있음</span></label><label className={`filter-chip ${hours?'checked':''}`}><input type="checkbox" checked={hours} onChange={e=>{setHours(e.target.checked);setSelected(null);}}/><Icon name="clock" size={16}/><span>운영시간 정보 있음</span></label></div>
@@ -61,8 +64,8 @@ function App(){
      {(notice||dataNotice||bookmarks.error)&&<p className="inline-notice" role="status">{notice||dataNotice||bookmarks.error}</p>}
 
     </section>
-    <section className="results-panel" aria-label="시설 목록">
-     <div className="results-heading"><div><span className="eyebrow">{savedOnly?'SAVED PLACES':'NURSING ROOMS'}</span><h2>{savedOnly?'저장한 수유실':'검색 결과'} <span>{livePlaces.loading?'검색 중…':results.length}</span></h2></div><span className="sort-label">{position?'직선거리순':'시설명·지역 검색'}</span><button className="mobile-list-toggle icon-button" aria-label={listOpen?'시설 목록 접기':'시설 목록 펼치기'} aria-expanded={listOpen} aria-controls="facility-results" onClick={()=>setListOpen(v=>!v)}><Icon name={listOpen?"close":"list"}/><span>{listOpen?"지도 보기":"목록 보기"}</span></button></div>
+    <section ref={sheet.panelRef} className="results-panel" aria-label="시설 목록">
+     <div className="results-heading"><div><span className="eyebrow">{savedOnly?'SAVED PLACES':'NURSING ROOMS'}</span><h2>{savedOnly?'저장한 수유실':'검색 결과'} <span>{livePlaces.loading?'검색 중…':results.length}</span></h2></div><span className="sort-label">{position?'직선거리순':'시설명·지역 검색'}</span><div className="sheet-drag-handle" role="slider" tabIndex={0} aria-label="시설 목록 높이" aria-orientation="vertical" aria-valuemin={0} aria-valuemax={100} aria-valuenow={listOpen?100:0} aria-valuetext={listOpen?'펼쳐짐 · 아래로 끌어 접기':'접힘 · 위로 끌어 펼치기'} aria-controls="facility-results" {...sheet.handlers}><span className="drag-grip"/><span className="drag-hint">{listOpen?'아래로 쏙 접기':'위로 쏙 펼치기'}</span></div></div>
      <div className="results-scroll" id="facility-results">     {liveEnabled&&<p className="provider-notice" role="status">{livePlaces.loading?'카카오에서 수유실 검색 후보를 찾고 있어요.':livePlaces.error||'카카오 장소검색 결과입니다. 수유실 유무·실내 위치는 방문 전 확인해주세요.'}</p>}{!demo&&!savedOnly&&query.trim().length>=2&&localMatches.length>0&&!extraSearch&&<button className="reset-button" onClick={()=>setExtraSearch(true)}>이 지역 추가 검색</button>}{demo&&<p className="demo-notice">예시 데이터 체험 중 · 실제 방문 장소가 아닙니다.</p>}{bounds&&<p className="bounds-notice">현재 지도 영역의 좌표 확인 시설만 표시합니다. <button onClick={()=>setBounds(null)}>영역 제한 해제</button></p>}
       {results.length===0&&livePlaces.loading?<div className="empty-results"><span className="empty-symbol"><Icon name="search" size={30}/></span><h3>주변 수유실을 검색하고 있어요</h3><p>공개자료에 없는 지역을 카카오에서 찾아봅니다.</p></div>:results.length===0?<div className="empty-results"><span className="empty-symbol"><Icon name={savedOnly?'heart':'search'} size={32}/></span><h3>{savedOnly?'아직 저장한 장소가 없어요':'조건에 맞는 수유실이 없어요'}</h3><p>{savedOnly?'시설 카드의 하트를 눌러 나만의 목록을 만들어보세요.':'검색 지역을 넓히거나 필터를 바꿔보세요.'}</p>{!savedOnly&&<button className="secondary-button" onClick={reset}>전체 시설 보기</button>}</div>:results.slice(0,visibleCount).map(f=><article className={`facility-card ${selected?.id===f.id?'selected':''}`} key={f.id}>
        <button className="card" aria-pressed={selected?.id===f.id} onClick={()=>choose(f)}><span className="card-topline"><span className="facility-type">{f.isExample?'예시 시설':f.provider==='kakao'?'수유실 검색 후보':f.location?.includes('가족')?'가족 수유실':'수유시설'}</span>{position&&hasCoordinates(f)&&<span className="distance">{distanceKm(position,f).toFixed(1)} km</span>}</span><h3>{f.name}</h3><p className="card-address">{f.address}</p><span className="card-amenities">{f.sourceStatus==='일시 중단'?<span className="status-paused">원본: 일시 중단</span>:<span><Icon name="clock" size={14}/>{f.hours??'운영시간 미확인'}</span>}{f.changingTable===true&&<span className="amenity-known"><Icon name="check" size={14}/>기저귀 교환대</span>}</span><span className="card-bottom"><span className={hasCoordinates(f)?'coordinate-badge':'unconfirmed-badge'}><Icon name={hasCoordinates(f)?'pin':'info'} size={13}/>{f.isExample?'예시 데이터':f.provider==='kakao'?'카카오 검색 · 확인 필요':hasCoordinates(f)?'지도 위치 제공':'목록 정보 제공'}</span><Icon name="arrow" size={16}/></span></button>
