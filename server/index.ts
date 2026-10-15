@@ -1,6 +1,7 @@
 import express from 'express';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {appMetadata} from './pwa';
 import {privateBetaGate} from './beta';
 import rateLimit from 'express-rate-limit';
 import { z } from 'zod';
@@ -8,6 +9,8 @@ import { randomUUID,randomBytes,scryptSync,timingSafeEqual,createHash } from 'no
 import { pool,initialize } from './db';
 await initialize();
 const app=express();app.disable('x-powered-by');
+const dist=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../dist');
+if(process.env.NODE_ENV==='production')app.use(appMetadata(dist));
 app.get('/healthz',(_req,res)=>res.json({ok:true}));
 if(process.env.PRIVATE_BETA==='true')app.use(privateBetaGate(process.env.BETA_USER??'',process.env.BETA_PASSWORD??''));
 app.use(express.json({limit:'16kb'}));
@@ -51,7 +54,6 @@ app.post('/api/admin/moderate',async(req,res)=>{const user=await requireUser(req
 app.use((err:unknown,_req:express.Request,res:express.Response,_next:express.NextFunction)=>{if(err instanceof z.ZodError){res.status(400).json({error:'입력값을 확인해주세요.'});return;}if((err as any)?.code==='ER_NO_REFERENCED_ROW_2'){res.status(404).json({error:'대상 시설 또는 후기를 찾을 수 없습니다.'});return;}console.error('API error type:',err instanceof Error?err.name:'unknown');res.status(500).json({error:'요청을 처리하지 못했습니다.'});});
 if(process.env.NODE_ENV==='production'){
  app.use('/api',(_req,res)=>res.status(404).json({error:'API를 찾을 수 없습니다.'}));
- const dist=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../dist');
  app.use(express.static(dist,{index:false,maxAge:0}));
  app.get('/{*path}',(_req,res)=>res.sendFile(path.join(dist,'index.html')));
 }

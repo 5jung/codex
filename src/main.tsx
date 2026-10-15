@@ -12,6 +12,7 @@ import {Admin} from './Admin';
 import {api,type User} from './api';
 import {Icon} from './Icon';
 import {useBookmarks} from './useBookmarks';
+import {InstallApp} from './InstallApp';
 import {useSheetDrag} from './useSheetDrag';
 import {usePlaceSearch} from './usePlaceSearch';
 function App(){
@@ -88,7 +89,7 @@ function App(){
    </div>
   </main>
   <dialog ref={accountDialog} className="service-dialog" aria-label="내 계정"><div className="dialog-header"><h2>내 계정</h2><button className="icon-button" aria-label="계정 패널 닫기" onClick={()=>accountDialog.current?.close()}><Icon name="close"/></button></div><Account user={user} onChange={setUser}/>{user?.role==='admin'&&<Admin onUpdated={refresh}/>}</dialog>
-  <dialog ref={infoDialog} className="service-dialog" aria-label="서비스 이용 안내"><div className="dialog-header"><h2>작은 쉼표를 찾는 지도</h2><button className="icon-button" aria-label="안내 닫기" onClick={()=>infoDialog.current?.close()}><Icon name="close"/></button></div><span className="info-hero"><Icon name="baby" size={36}/></span><p>아이와 함께하는 외출이 조금 더 편안해지도록,<br/>공개된 수유실 정보를 한곳에 모았어요.</p><div className="coverage-stat"><strong>{facilities.length}<small>건의 공개자료</small></strong><strong>{facilities.filter(hasCoordinates).length}<small>건의 지도 위치</small></strong></div><h3>현재 제공하는 지역</h3><p>부산 · 대구도시철도 1호선 · 성남 · 제주 · 인천 부평. 전국 공식 데이터는 준비 중입니다. 공개자료에 없는 지역은 카카오 장소검색 후보를 별도 표시해요. 검색 후보의 수유실 유무·실내 위치는 방문 전 확인해주세요.</p><h3>저장한 장소</h3><p>하트를 누르면 현재 브라우저에 저장됩니다. 기기 간 동기화는 지원하지 않으며, 브라우저 데이터를 지우면 삭제됩니다.</p><h3>현재 위치</h3><p>‘내 주변 찾기’를 누를 때만 조회합니다. 자체 서버에 위치를 저장하지 않으며, 지도 표시에 필요한 조회는 지도 제공사에 발생합니다.</p><p className="fine-print">원본 수집일: {official.metadata.collectedAt.slice(0,10)} · 원본 정보와 실제 현장 상태가 다를 수 있습니다.</p><div className="demo-switch"><h3>화면 체험</h3><button className="secondary-button" aria-pressed={!demo} onClick={()=>switchData(false)}>공식 자료</button><button className="text-button" aria-pressed={demo} onClick={()=>switchData(true)}>예시 데이터 체험</button></div></dialog>
+  <dialog ref={infoDialog} className="service-dialog" aria-label="서비스 이용 안내"><div className="dialog-header"><h2>작은 쉼표를 찾는 지도</h2><button className="icon-button" aria-label="안내 닫기" onClick={()=>infoDialog.current?.close()}><Icon name="close"/></button></div><span className="info-hero"><Icon name="baby" size={36}/></span><p>아이와 함께하는 외출이 조금 더 편안해지도록,<br/>공개된 수유실 정보를 한곳에 모았어요.</p><InstallApp/><div className="coverage-stat"><strong>{facilities.length}<small>건의 공개자료</small></strong><strong>{facilities.filter(hasCoordinates).length}<small>건의 지도 위치</small></strong></div><h3>현재 제공하는 지역</h3><p>부산 · 대구도시철도 1호선 · 성남 · 제주 · 인천 부평. 전국 공식 데이터는 준비 중입니다. 공개자료에 없는 지역은 카카오 장소검색 후보를 별도 표시해요. 검색 후보의 수유실 유무·실내 위치는 방문 전 확인해주세요.</p><h3>저장한 장소</h3><p>하트를 누르면 현재 브라우저에 저장됩니다. 기기 간 동기화는 지원하지 않으며, 브라우저 데이터를 지우면 삭제됩니다.</p><h3>현재 위치</h3><p>‘내 주변 찾기’를 누를 때만 조회합니다. 자체 서버에 위치를 저장하지 않으며, 지도 표시에 필요한 조회는 지도 제공사에 발생합니다.</p><p className="fine-print">원본 수집일: {official.metadata.collectedAt.slice(0,10)} · 원본 정보와 실제 현장 상태가 다를 수 있습니다.</p><div className="demo-switch"><h3>화면 체험</h3><button className="secondary-button" aria-pressed={!demo} onClick={()=>switchData(false)}>공식 자료</button><button className="text-button" aria-pressed={demo} onClick={()=>switchData(true)}>예시 데이터 체험</button></div></dialog>
  </div>;
 }
 createRoot(document.getElementById('root')!).render(<App/>);

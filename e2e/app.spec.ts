@@ -177,3 +177,13 @@ test('목록은 터치 드래그에 따라 움직이고 취소·키보드 조작
  await expect(page.getByRole('button',{name:'목록 보기',exact:true})).toHaveCount(0);
  await page.screenshot({path:'/workspace/artifacts/nursing-cute-mobile.png'});
 });
+
+test('홈 화면 아이콘 설정과 기기별 설치 안내·설치 요청',async({page})=>{
+ await page.goto('/',{waitUntil:'domcontentloaded'});
+ const manifestResponse=await page.request.get('/manifest.webmanifest');expect(manifestResponse.ok()).toBe(true);expect((await manifestResponse.json()).display).toBe('standalone');
+ await expect(page.locator('link[rel="apple-touch-icon"]')).toHaveAttribute('href','/icons/app-180.png');
+ await page.getByRole('button',{name:'이용 안내',exact:true}).click();const guide=page.getByRole('region',{name:'홈 화면에 추가 안내'});await expect(guide).toContainText('Safari의 공유 메뉴');await expect(guide).toContainText('앱 설치');
+ await page.evaluate(()=>{const event=new Event('beforeinstallprompt',{cancelable:true});Object.assign(event,{prompt:async()=>{},userChoice:Promise.resolve({outcome:'accepted'})});window.dispatchEvent(event);});
+ await guide.getByRole('button',{name:'홈 화면에 설치'}).click();await expect(guide.getByRole('status')).toContainText('추가 요청을 보냈어요');
+ await page.evaluate(()=>window.dispatchEvent(new Event('appinstalled')));await expect(guide).toContainText('지금 앱 화면으로 이용하고 있어요.');await expect(guide.getByRole('button',{name:'홈 화면에 설치'})).toHaveCount(0);
+});

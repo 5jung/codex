@@ -4,6 +4,7 @@ COPY package.json package-lock.json ./
 RUN npm ci --no-audit --no-fund
 COPY tsconfig.json vite.config.ts index.html ./
 COPY src ./src
+COPY public ./public
 ARG VITE_KAKAO_MAP_KEY
 RUN VITE_KAKAO_MAP_KEY="$VITE_KAKAO_MAP_KEY" npm run build
 
